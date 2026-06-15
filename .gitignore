@@ -22,3 +22,29 @@
 # virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
 hs_err_pid*
 replay_pid*
+
+# --- Maven / Spring Boot (backend) ---
+target/
+backend/target/
+
+# --- Node / Vite (frontend) ---
+node_modules/
+frontend/dist/
+frontend/dist-ssr/
+*.local
+
+# --- Secrets / env (never commit real values) ---
+.env
+.env.*
+!.env.example
+# Skeleton application.properties holds only non-secret defaults and stays committed.
+# Real secrets (DB password, API keys) go in a gitignored local override, added in §2:
+application-local.properties
+backend/src/main/resources/application-local.properties
+
+# --- IDE / OS ---
+.idea/
+*.iml
+.vscode/
+.DS_Store
+

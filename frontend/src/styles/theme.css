@@ -1,0 +1,94 @@
+/* World Cup Tracker — broadcast-dashboard theme foundation (PLAN.md Phase 0).
+   Design tokens live here; slice owners build on these variables/components. */
+
+:root {
+  --color-bg: #0b1220;
+  --color-surface: #131c2e;
+  --color-surface-2: #1b2740;
+  --color-border: #27324a;
+  --color-text: #e8edf6;
+  --color-text-muted: #9aa7bd;
+  --color-accent: #2bd576;       /* pitch green */
+  --color-accent-2: #ffd34e;     /* trophy gold */
+  --radius: 10px;
+  --shadow: 0 2px 10px rgba(0, 0, 0, 0.35);
+  --font: "Segoe UI", system-ui, -apple-system, Roboto, Helvetica, Arial, sans-serif;
+  --maxw: 1080px;
+}
+
+* { box-sizing: border-box; }
+
+html, body, #root { height: 100%; }
+
+body {
+  margin: 0;
+  font-family: var(--font);
+  background: var(--color-bg);
+  color: var(--color-text);
+}
+
+.app-shell {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+.app-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0.9rem 1.25rem;
+  background: linear-gradient(90deg, var(--color-surface-2), var(--color-surface));
+  border-bottom: 1px solid var(--color-border);
+  box-shadow: var(--shadow);
+}
+
+.brand {
+  font-weight: 800;
+  letter-spacing: 0.3px;
+  font-size: 1.15rem;
+}
+
+.nav { display: flex; gap: 0.35rem; flex-wrap: wrap; }
+
+.nav-link {
+  color: var(--color-text-muted);
+  text-decoration: none;
+  padding: 0.4rem 0.75rem;
+  border-radius: var(--radius);
+  font-weight: 600;
+  transition: background 0.15s, color 0.15s;
+}
+.nav-link:hover { color: var(--color-text); background: var(--color-surface-2); }
+.nav-link.is-active { color: var(--color-bg); background: var(--color-accent); }
+
+.app-main {
+  flex: 1;
+  width: 100%;
+  max-width: var(--maxw);
+  margin: 0 auto;
+  padding: 1.5rem 1.25rem;
+}
+
+.app-footer {
+  padding: 1rem 1.25rem;
+  border-top: 1px solid var(--color-border);
+  color: var(--color-text-muted);
+  font-size: 0.85rem;
+  text-align: center;
+}
+
+.page h1 { margin: 0 0 0.5rem; }
+.lede { color: var(--color-text); font-size: 1.05rem; margin: 0.25rem 0 1rem; }
+.muted { color: var(--color-text-muted); }
+.status-line { margin: 0.5rem 0; }
+
+.status-pill {
+  display: inline-block;
+  padding: 0.15rem 0.6rem;
+  border-radius: 999px;
+  background: var(--color-surface-2);
+  border: 1px solid var(--color-border);
+  font-weight: 600;
+}

@@ -91,6 +91,30 @@ public class VenueController {
     }
 
     /**
+     * Lists landmark images for a venue by scanning /images/landmarks/{id}/
+     * GET /api/venues/{id}/landmark-images
+     */
+    @GetMapping("/api/venues/{id}/landmark-images")
+    @ResponseBody
+    public ResponseEntity<List<String>> apiLandmarkImages(@PathVariable Long id) {
+        String folder = "/images/landmarks/" + id;
+        try {
+            Resource resource = resourceLoader.getResource("classpath:static" + folder);
+            if (!resource.exists()) return ResponseEntity.ok(Collections.emptyList());
+            File dir = resource.getFile();
+            File[] files = dir.listFiles(f -> !f.getName().startsWith("."));
+            if (files == null) return ResponseEntity.ok(Collections.emptyList());
+            Arrays.sort(files, (a, b) -> a.getName().compareToIgnoreCase(b.getName()));
+            List<String> urls = Arrays.stream(files)
+                    .map(f -> folder + "/" + f.getName())
+                    .collect(Collectors.toList());
+            return ResponseEntity.ok(urls);
+        } catch (Exception e) {
+            return ResponseEntity.ok(Collections.emptyList());
+        }
+    }
+
+    /**
      * Lists image URLs for a venue by scanning its static folder.
      * GET /api/venues/{id}/images
      * Returns e.g. ["/images/USA/MetLife/1.jpg", "/images/USA/MetLife/2.jpeg", ...]

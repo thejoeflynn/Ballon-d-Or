@@ -201,6 +201,34 @@
       width: 0%; transition: width 0.5s linear; pointer-events: none;
     }
 
+    /* ── Attractions ─────────────────────────────────────────────── */
+    .attractions-grid {
+      display: grid; grid-template-columns: repeat(5, 1fr); gap: 12px;
+    }
+    .attraction-card {
+      border-radius: 12px; overflow: hidden;
+      border: 1px solid rgba(255,107,53,0.12);
+      background: rgba(255,107,53,0.03);
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+    .attraction-card:hover { transform: translateY(-3px); box-shadow: 0 6px 20px rgba(0,0,0,0.1); }
+    .attraction-img {
+      width: 100%; height: 100px; object-fit: cover; display: block;
+      background: linear-gradient(135deg, rgba(255,107,53,0.15), rgba(232,64,122,0.15));
+    }
+    .attraction-img-placeholder {
+      width: 100%; height: 100px;
+      display: flex; align-items: center; justify-content: center; font-size: 32px;
+      background: linear-gradient(135deg, rgba(255,107,53,0.1), rgba(232,64,122,0.1));
+    }
+    .attraction-body { padding: 10px 10px 12px; }
+    .attraction-type { font-size: 9px; font-weight: 700; text-transform: uppercase;
+      letter-spacing: 1px; color: var(--orange); margin-bottom: 4px; }
+    .attraction-name { font-size: 12px; font-weight: 700; color: var(--dark);
+      line-height: 1.3; margin-bottom: 4px; }
+    .attraction-dist { font-size: 10px; color: #888; }
+    .attractions-loading { text-align:center; padding: 24px; color: #aaa; font-size:13px; }
+
     /* ── Share button ────────────────────────────────────────────── */
     .share-btn {
       display: inline-flex; align-items: center; gap: 6px;
@@ -331,6 +359,14 @@
           <p style="font-size:11px;color:#aaa;text-align:center;margin-top:12px;font-style:italic">
             Match fixtures loading soon…
           </p>
+        </div>
+      </div>
+
+      <!-- Nearby Attractions -->
+      <div class="card">
+        <div class="card-title">Nearby Attractions</div>
+        <div id="attractionsContainer">
+          <div class="attractions-loading">📍 Finding nearby attractions…</div>
         </div>
       </div>
 
@@ -507,6 +543,93 @@
   }
 
   loadHeroImages();
+
+  /* ── Nearby Attractions ───────────────────────────────────────── */
+  const ATTRACTION_ICONS = {
+    museum: '🏛️', attraction: '⭐', viewpoint: '👁️', gallery: '🖼️',
+    zoo: '🦁', theme_park: '🎢', aquarium: '🐟', artwork: '🎨',
+    monument: '🗿', memorial: '🕊️', castle: '🏰', ruins: '🏚️',
+    park: '🌳', nature_reserve: '🌿', default: '📍'
+  };
+
+  function attractionIcon(tags) {
+    const t = tags.tourism || tags.historic || tags.leisure || 'default';
+    return ATTRACTION_ICONS[t] || ATTRACTION_ICONS.default;
+  }
+
+  function attractionType(tags) {
+    return (tags.tourism || tags.historic || tags.leisure || 'place')
+      .replace(/_/g, ' ');
+  }
+
+  function haversineM(lat1, lng1, lat2, lng2) {
+    const R = 6371000, dLat = (lat2-lat1)*Math.PI/180, dLng = (lng2-lng1)*Math.PI/180;
+    const a = Math.sin(dLat/2)**2 + Math.cos(lat1*Math.PI/180)*Math.cos(lat2*Math.PI/180)*Math.sin(dLng/2)**2;
+    return Math.round(R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a)));
+  }
+
+  async function loadAttractions() {
+    const container = document.getElementById('attractionsContainer');
+    try {
+      const query = `[out:json][timeout:15];(
+        node["tourism"~"attraction|museum|viewpoint|gallery|zoo|theme_park|aquarium|artwork"](around:5000,${vLat},${vLng});
+        node["historic"~"monument|memorial|castle|ruins"](around:5000,${vLat},${vLng});
+        node["leisure"="park"](around:4000,${vLat},${vLng});
+      );out 20;`;
+
+      const res = await fetch(
+        `https://overpass-api.de/api/interpreter?data=${encodeURIComponent(query)}`
+      ).then(r => r.json());
+
+      // Filter to named places, sort by distance, take top 5
+      const places = (res.elements || [])
+        .filter(e => e.tags?.name)
+        .map(e => ({ ...e, distM: haversineM(vLat, vLng, e.lat, e.lon) }))
+        .sort((a, b) => a.distM - b.distM)
+        .slice(0, 5);
+
+      // Fetch landmark images
+      let landmarkImgs = [];
+      try {
+        landmarkImgs = await fetch(`/api/venues/${vId}/landmark-images`).then(r => r.json());
+      } catch(e) {}
+
+      if (places.length === 0) {
+        container.innerHTML = `<div class="attractions-loading">No attractions found nearby.</div>`;
+        return;
+      }
+
+      const grid = document.createElement('div');
+      grid.className = 'attractions-grid';
+
+      places.forEach((p, i) => {
+        const img = landmarkImgs[i];
+        const distText = p.distM < 1000
+          ? `${p.distM} m from stadium`
+          : `${(p.distM/1000).toFixed(1)} km from stadium`;
+        const card = document.createElement('div');
+        card.className = 'attraction-card';
+        card.innerHTML = `
+          ${img
+            ? `<img class="attraction-img" src="${img}" alt="${p.tags.name}" loading="lazy"/>`
+            : `<div class="attraction-img-placeholder">${attractionIcon(p.tags)}</div>`}
+          <div class="attraction-body">
+            <div class="attraction-type">${attractionIcon(p.tags)} ${attractionType(p.tags)}</div>
+            <div class="attraction-name">${p.tags.name}</div>
+            <div class="attraction-dist">📍 ${distText}</div>
+          </div>`;
+        grid.appendChild(card);
+      });
+
+      container.innerHTML = '';
+      container.appendChild(grid);
+
+    } catch(e) {
+      container.innerHTML = `<div class="attractions-loading">Could not load attractions.</div>`;
+    }
+  }
+
+  loadAttractions();
 
   /* ── Share button ──────────────────────────────────────────────── */
   function shareVenue() {

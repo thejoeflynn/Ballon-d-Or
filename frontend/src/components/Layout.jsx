@@ -1,21 +1,19 @@
 import { NavLink, Outlet } from 'react-router-dom';
+import Logo from './Logo.jsx';
 
 const links = [
   { to: '/', label: 'Home', end: true },
   { to: '/teams', label: 'Teams' },
   { to: '/matches', label: 'Matches' },
   { to: '/venues', label: 'Venues' },
+  { to: '/design', label: 'Style' },
 ];
 
-/**
- * Shared layout: header/nav + routed content + footer. This is the start of the
- * shared design system (PLAN.md Phase 0); reusable components live alongside it.
- */
 export default function Layout() {
   return (
     <div className="app-shell">
       <header className="app-header">
-        <div className="brand">⚽ World Cup Tracker</div>
+        <Logo size="md" withWordmark />
         <nav className="nav">
           {links.map((l) => (
             <NavLink

@@ -1,8 +1,12 @@
 import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
+import { fileURLToPath } from 'url';
+import { dirname, resolve } from 'path';
 
-// React SPA dev server on :5173, calling the Spring Boot API on :8080 (CORS-enabled).
+const __dirname = dirname(fileURLToPath(import.meta.url));
+
 export default defineConfig({
   plugins: [react()],
+  publicDir: resolve(__dirname, '../assets'),
   server: { port: 5173 },
 });

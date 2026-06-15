@@ -5,11 +5,8 @@ import Teams from './pages/Teams.jsx';
 import Matches from './pages/Matches.jsx';
 import MatchDetail from './pages/MatchDetail.jsx';
 import Venues from './pages/Venues.jsx';
+import DesignReference from './pages/DesignReference.jsx';
 
-/**
- * App routing shell (PLAN.md §1). Feature pages are placeholders owned per the
- * work split; each slice owner fills in their page(s).
- */
 export default function App() {
   return (
     <Routes>
@@ -19,6 +16,7 @@ export default function App() {
         <Route path="matches" element={<Matches />} />
         <Route path="matches/:id" element={<MatchDetail />} />
         <Route path="venues" element={<Venues />} />
+        <Route path="design" element={<DesignReference />} />
         <Route path="*" element={<Home />} />
       </Route>
     </Routes>

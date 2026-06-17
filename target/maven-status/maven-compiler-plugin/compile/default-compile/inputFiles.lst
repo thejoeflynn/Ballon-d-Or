@@ -3,10 +3,13 @@
 /Users/joe/Projects/Ballon-d-Or/src/main/java/com/zipcode/worldcuptracker/service/StandingsService.java
 /Users/joe/Projects/Ballon-d-Or/src/main/java/com/zipcode/worldcuptracker/standings/MockStandingsData.java
 /Users/joe/Projects/Ballon-d-Or/src/main/java/com/zipcode/worldcuptracker/standings/StandingRowView.java
+/Users/joe/Projects/Ballon-d-Or/src/main/java/com/zipcode/worldcuptracker/controller/TeamsController.java
 /Users/joe/Projects/Ballon-d-Or/src/main/java/com/zipcode/worldcuptracker/repository/VenueRepository.java
+/Users/joe/Projects/Ballon-d-Or/src/main/java/com/zipcode/worldcuptracker/standings/MockTeamsData.java
 /Users/joe/Projects/Ballon-d-Or/src/main/java/com/zipcode/worldcuptracker/WorldCupTrackerApplication.java
 /Users/joe/Projects/Ballon-d-Or/src/main/java/com/zipcode/worldcuptracker/standings/ThirdPlaceRow.java
 /Users/joe/Projects/Ballon-d-Or/src/main/java/com/zipcode/worldcuptracker/standings/GroupStandingView.java
+/Users/joe/Projects/Ballon-d-Or/src/main/java/com/zipcode/worldcuptracker/standings/TeamEntry.java
 /Users/joe/Projects/Ballon-d-Or/src/main/java/com/zipcode/worldcuptracker/controller/VenueController.java
 /Users/joe/Projects/Ballon-d-Or/src/main/java/com/zipcode/worldcuptracker/model/Venue.java
 /Users/joe/Projects/Ballon-d-Or/src/main/java/com/zipcode/worldcuptracker/service/BracketService.java

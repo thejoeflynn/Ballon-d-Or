@@ -3,7 +3,7 @@ import { useState } from 'react';
 const sizePx = { sm: 40, md: 72, lg: 120 };
 
 export default function Crest({ slug, crestUrl, alt, size = 'md' }) {
-  const [src, setSrc] = useState(crestUrl || `/crests/${slug}.jpg`);
+  const [src, setSrc] = useState(crestUrl || `/crests/${slug}.png`);
   const px = sizePx[size] ?? sizePx.md;
 
   return (
@@ -14,7 +14,7 @@ export default function Crest({ slug, crestUrl, alt, size = 'md' }) {
       height={px}
       style={{ objectFit: 'contain' }}
       onError={() => {
-        if (src !== `/crests/${slug}.jpg`) setSrc(`/crests/${slug}.jpg`);
+        if (src !== `/crests/${slug}.png`) setSrc(`/crests/${slug}.png`);
       }}
     />
   );

@@ -25,6 +25,7 @@ public class StandingsController {
         model.addAttribute("projectedRunnersUp", standingsService.getGroupRunnersUp());
         model.addAttribute("projectedBestThirds",standingsService.getBestThirds(8));
         model.addAttribute("projectedR32",       bracketService.getProjectedR32());
+        model.addAttribute("activePage",         "standings");
         return "standings/standings";
     }
 }

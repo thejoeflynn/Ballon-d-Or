@@ -4,68 +4,14 @@
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>FIFA World Cup 2026™ — Standings</title>
+  <link rel="icon" type="image/png" href="/logos/app-icon.png"/>
   <link rel="preconnect" href="https://fonts.googleapis.com"/>
   <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;600;700&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="/css/site.css"/>
 
   <style>
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
-    :root {
-      --orange: #FF6B35;
-      --peach:  #FFAA70;
-      --pink:   #E8407A;
-      --gold:   #FFB830;
-      --dark:   #2D1200;
-      --white:  #FFFFFF;
-      --panel:  rgba(255,255,255,0.93);
-      --radius: 14px;
-      --advance: #2bd576;
-      --wildcard: #ffd34e;
-    }
-
-    body {
-      font-family: 'Segoe UI', system-ui, sans-serif;
-      background: linear-gradient(135deg, #FF6B35 0%, #FF9A5C 30%, #E8407A 70%, #C0306A 100%);
-      color: var(--dark);
-      min-height: 100vh;
-    }
-
-    /* ─── Header ─────────────────────────────────────────────────── */
-    header {
-      display: flex; align-items: center; justify-content: space-between;
-      padding: 10px 24px;
-      background: rgba(255,255,255,0.15);
-      backdrop-filter: blur(12px);
-      border-bottom: 1.5px solid rgba(255,255,255,0.35);
-      position: sticky; top: 0; z-index: 100;
-    }
-    .header-left { display: flex; align-items: center; gap: 14px; }
-    .header-logo {
-      width: 36px; height: 36px; object-fit: contain;
-      filter: drop-shadow(0 2px 6px rgba(0,0,0,0.25));
-    }
-    .header-title h1 {
-      font-family: 'Oswald', sans-serif;
-      font-size: 15px; font-weight: 700; color: var(--white);
-      letter-spacing: 1.5px; text-transform: uppercase;
-      text-shadow: 0 1px 4px rgba(0,0,0,0.25);
-    }
-    .header-title p { font-size: 11px; color: rgba(255,255,255,0.75); }
-
-    nav { display: flex; gap: 6px; }
-    .nav-link {
-      padding: 6px 14px; border-radius: 20px;
-      border: 1.5px solid rgba(255,255,255,0.5);
-      background: rgba(255,255,255,0.12); color: var(--white);
-      font-size: 12px; font-weight: 700; text-decoration: none;
-      letter-spacing: 0.5px; backdrop-filter: blur(6px);
-      transition: background 0.2s;
-    }
-    .nav-link:hover { background: rgba(255,255,255,0.28); }
-    .nav-link.active { background: var(--white); color: var(--orange); border-color: var(--white); }
-
     /* ─── Page Container ─────────────────────────────────────────── */
-    .page { max-width: 1080px; margin: 0 auto; padding: 24px 16px 48px; }
+    .page { padding: 24px 0 48px; }
 
     .page-title {
       font-family: 'Oswald', sans-serif;
@@ -293,22 +239,21 @@
   </style>
 </head>
 <body>
+<div class="app-shell">
 
-<!-- ─── Header ──────────────────────────────────────────────────────── -->
-<header>
-  <div class="header-left">
-    <img class="header-logo" src="/logos/app-icon.png" alt="World Cup Tracker logo"/>
-    <div class="header-title">
-      <h1>World Cup Tracker</h1>
-      <p>FIFA World Cup 2026™</p>
+  <aside th:replace="~{fragments/sidebar :: sidebar('standings')}">nav</aside>
+
+  <div class="mobile-topbar">
+    <img src="/logos/app-icon.png" alt="logo" style="height:28px;object-fit:contain;"/>
+    <div style="display:flex;gap:6px;">
+      <a href="/venues">Venues</a>
+      <a href="/standings" style="color:#fff;">Standings</a>
+      <a href="/teams">Teams</a>
     </div>
   </div>
-  <nav>
-    <a class="nav-link" href="/venues">Venues</a>
-    <a class="nav-link active" href="/standings">Standings</a>
-  </nav>
-</header>
 
+  <main class="app-main">
+  <div class="page-inner">
 <!-- ─── Page ─────────────────────────────────────────────────────────── -->
 <div class="page">
   <h1 class="page-title">Standings &amp; Bracket</h1>
@@ -509,6 +454,9 @@
   </div><!-- /tab-bracket -->
 
 </div><!-- /page -->
+  </div><!-- /page-inner -->
+  </main>
+</div><!-- /app-shell -->
 
 <script>
   function switchTab(id, btn) {

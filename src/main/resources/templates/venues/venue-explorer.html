@@ -448,12 +448,12 @@ const COUNTRIES = {
     venues: 3,
     center: [23.63, -102.55], zoom: 5,
     cardGradient: 'linear-gradient(135deg,#1A6B35,#0D3D1C)',
-    track: '/audio/illuminate.mp3',
+    track: '/audio/daidai.mp3',
   }
 };
 
 /* ─── Map Init ──────────────────────────────────────────────── */
-const map = L.map('map', { center: [40, -100], zoom: 3, zoomControl: true });
+const map = L.map('map', { center: [40, -100], zoom: 3, zoomControl: true, scrollWheelZoom: false });
 
 L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png', {
   attribution: '&copy; OpenStreetMap &copy; CARTO',
@@ -771,7 +771,7 @@ const TRACKS = {
   '/audio/anthem.mp3':     { title: 'FIFA World Cup 2026™ Anthem', artist: 'Official Soundtrack' },
   '/audio/dna.mp3':        { title: 'DNA',                          artist: '🇺🇸 United States' },
   '/audio/goals.mp3':      { title: 'GOALS',                        artist: '🇨🇦 Canada' },
-  '/audio/illuminate.mp3': { title: 'Illuminate',                   artist: '🇲🇽 México' },
+  '/audio/daidai.mp3':     { title: 'Daidai',                        artist: '🇲🇽 México' },
 };
 
 function switchTrack(src) {
@@ -871,7 +871,7 @@ const TRACK_FLAGS = {
   '/audio/anthem.mp3':     '🌍',
   '/audio/dna.mp3':        '🇺🇸',
   '/audio/goals.mp3':      '🇨🇦',
-  '/audio/illuminate.mp3': '🇲🇽',
+  '/audio/daidai.mp3':     '🇲🇽',
 };
 
 /* ─── Venue count ticker ─────────────────────────────────────── */

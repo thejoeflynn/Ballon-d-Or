@@ -5,6 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>FIFA World Cup 2026™ — Venue Explorer</title>
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
+  <link rel="icon" type="image/png" href="/logos/app-icon.png"/>
+  <link rel="stylesheet" href="/css/site.css"/>
 
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -20,15 +22,20 @@
       --radius: 14px;
     }
 
-    body {
-      font-family: 'Segoe UI', system-ui, sans-serif;
-      background: linear-gradient(135deg, #FF6B35 0%, #FF9A5C 30%, #E8407A 70%, #C0306A 100%);
-      color: var(--dark);
-      height: 100vh;
+    body { overflow: hidden; }
+
+    /* venue-shell: the right column holding header + map */
+    .venue-shell {
+      flex: 1;
+      min-width: 0;
       display: flex;
       flex-direction: column;
+      height: 100vh;
       overflow: hidden;
     }
+
+    /* override app-shell to also be 100vh so map stays full-screen */
+    .app-shell { height: 100vh; overflow: hidden; }
 
     /* ─── Header ─────────────────────────────────────────────────── */
     header {
@@ -141,7 +148,7 @@
     .main { display: flex; flex: 1; overflow: hidden; }
 
     /* ─── Sidebar ────────────────────────────────────────────────── */
-    .sidebar {
+    .venue-panel {
       width: 300px; flex-shrink: 0;
       background: var(--panel); backdrop-filter: blur(16px);
       border-right: 1.5px solid rgba(255,107,53,0.15);
@@ -278,7 +285,7 @@
       font-size: 16px; color: var(--orange); transition: background 0.2s;
     }
     #fullscreenBtn:hover { background: rgba(255,107,53,0.1); }
-    body.fs-map .sidebar { display: none; }
+    body.fs-map .venue-panel { display: none; }
     body.fs-map #map { flex: 1; }
 
     /* ─── Search bar ─────────────────────────────────────────────── */
@@ -342,12 +349,17 @@
     }
 
     /* ─── Scrollbar ──────────────────────────────────────────────── */
-    .sidebar::-webkit-scrollbar { width: 4px; }
-    .sidebar::-webkit-scrollbar-track { background: transparent; }
-    .sidebar::-webkit-scrollbar-thumb { background: rgba(255,107,53,0.3); border-radius: 2px; }
+    .venue-panel::-webkit-scrollbar { width: 4px; }
+    .venue-panel::-webkit-scrollbar-track { background: transparent; }
+    .venue-panel::-webkit-scrollbar-thumb { background: rgba(255,107,53,0.3); border-radius: 2px; }
   </style>
 </head>
 <body>
+<div class="app-shell">
+
+  <aside th:replace="~{fragments/sidebar :: sidebar('venues')}">nav</aside>
+
+  <div class="venue-shell">
 
 <header>
   <div class="header-left">
@@ -398,7 +410,7 @@
 </div>
 
 <div class="main">
-  <aside class="sidebar">
+  <aside class="venue-panel">
     <div class="sidebar-header">
       <h2 id="sidebarTitle">Host Countries</h2>
       <div class="sidebar-count" id="sidebarCount">3 countries · <span id="venueCountSpan">14</span> venues</div>
@@ -942,5 +954,8 @@ function setPulse(venueId, on) {
   activePulseEl = ring;
 }
 </script>
+
+  </div><!-- /venue-shell -->
+</div><!-- /app-shell -->
 </body>
 </html>

@@ -4,7 +4,7 @@ export default function Logo({ size = 'md', withWordmark = false }) {
     <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
       <img
         src="/logos/app-icon.png"
-        alt="World Cup Tracker logo"
+        alt="Ballon d'Or logo"
         width={px}
         height={px}
         style={{ objectFit: 'contain' }}
@@ -21,7 +21,7 @@ export default function Logo({ size = 'md', withWordmark = false }) {
           WebkitBackgroundClip: 'text',
           WebkitTextFillColor: 'transparent',
         }}>
-          World Cup Tracker
+          Ballon d'Or
         </span>
       )}
     </div>

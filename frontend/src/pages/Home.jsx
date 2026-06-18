@@ -9,10 +9,10 @@ export default function Home() {
   }, []);
   return (
     <div className="page">
-      <h1>World Cup Tracker</h1>
-      <p className="lede">React SPA + Spring Boot REST API — architecture skeleton.</p>
+      <h1>Ballon d'Or</h1>
+      <p className="lede">Your guide to FIFA World Cup 2026™ — teams, standings, venues, and more.</p>
       <p>Backend status: <strong>{status}</strong></p>
-      <p className="muted">Feature pages and API endpoints arrive in later phases — see PLAN.md.</p>
+      <p className="muted">Use the sidebar to explore all 48 teams, group standings, match schedule, and host venues.</p>
     </div>
   );
 }

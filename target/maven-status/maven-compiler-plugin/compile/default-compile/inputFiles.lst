@@ -1,6 +1,7 @@
 /Users/joe/Projects/Ballon-d-Or/src/main/java/com/zipcode/worldcuptracker/repository/CommentaryRepository.java
 /Users/joe/Projects/Ballon-d-Or/src/main/java/com/zipcode/worldcuptracker/controller/CommentaryController.java
 /Users/joe/Projects/Ballon-d-Or/src/main/java/com/zipcode/worldcuptracker/controller/StandingsController.java
+/Users/joe/Projects/Ballon-d-Or/src/main/java/com/zipcode/worldcuptracker/controller/HomeController.java
 /Users/joe/Projects/Ballon-d-Or/src/main/java/com/zipcode/worldcuptracker/model/Commentary.java
 /Users/joe/Projects/Ballon-d-Or/src/main/java/com/zipcode/worldcuptracker/service/StandingsService.java
 /Users/joe/Projects/Ballon-d-Or/src/main/java/com/zipcode/worldcuptracker/standings/MatchEntry.java

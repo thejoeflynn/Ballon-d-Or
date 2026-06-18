@@ -19,15 +19,19 @@ export default function TeamDetail() {
   return (
     <div className="page team-detail">
       <Link to="/teams" className="back-link">← All Teams</Link>
-      <div className="team-detail-hero">
-        <Crest slug={team.slug} size="lg" alt={team.name} />
-        <div>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '0.4rem' }}>
-            <Flag slug={team.slug} alt={team.name} />
-            <span className="team-detail-group">Group {team.group}</span>
+      <div className="team-detail-banner">
+        <Flag slug={team.slug} alt="" className="team-detail-banner-bg" />
+        <div className="team-detail-banner-overlay" />
+        <div className="team-detail-banner-content">
+          <Crest slug={team.slug} size="lg" alt={team.name} />
+          <div>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '0.4rem' }}>
+              <Flag slug={team.slug} alt={team.name} className="team-card-flag-chip" loading="lazy" />
+              <span className="team-detail-group">Group {team.group}</span>
+            </div>
+            <h1 className="team-detail-name">{team.name}</h1>
+            <p className="team-detail-abbr">{team.abbr}</p>
           </div>
-          <h1 className="team-detail-name">{team.name}</h1>
-          <p className="team-detail-abbr">{team.abbr}</p>
         </div>
       </div>
       <div className="coming-soon-card">

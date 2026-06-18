@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { MapContainer, TileLayer, Marker, Popup, useMap } from 'react-leaflet';
+import { useSettings } from '../context/SettingsContext.jsx';
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 
@@ -30,6 +31,10 @@ export default function Venues() {
   const [venues, setVenues] = useState([]);
   const [filter, setFilter] = useState('All');
   const [loading, setLoading] = useState(true);
+  const { resolvedTheme } = useSettings();
+  const tileUrl = resolvedTheme === 'dark'
+    ? 'https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png'
+    : 'https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png';
 
   useEffect(() => {
     setLoading(true);
@@ -70,7 +75,8 @@ export default function Venues() {
             scrollWheelZoom
           >
             <TileLayer
-              url="https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png"
+              key={resolvedTheme}
+              url={tileUrl}
               attribution='&copy; <a href="https://carto.com/">CARTO</a>'
             />
             <FitBounds venues={venues} />

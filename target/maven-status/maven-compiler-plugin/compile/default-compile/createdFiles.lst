@@ -4,6 +4,7 @@ com/zipcode/worldcuptracker/model/Commentary.class
 com/zipcode/worldcuptracker/standings/GroupStandingView.class
 com/zipcode/worldcuptracker/WorldCupTrackerApplication.class
 com/zipcode/worldcuptracker/service/StandingsService.class
+com/zipcode/worldcuptracker/controller/HomeController.class
 com/zipcode/worldcuptracker/standings/ThirdPlaceRow.class
 com/zipcode/worldcuptracker/controller/TeamsController.class
 com/zipcode/worldcuptracker/model/Venue.class

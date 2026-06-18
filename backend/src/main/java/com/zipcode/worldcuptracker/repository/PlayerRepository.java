@@ -1,11 +1,14 @@
 package com.zipcode.worldcuptracker.repository;
 
-import java.util.List;
-
+import com.zipcode.worldcuptracker.model.Player;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import com.zipcode.worldcuptracker.model.Player;
+import java.util.List;
+import java.util.Optional;
 
 public interface PlayerRepository extends JpaRepository<Player, Long> {
+
     List<Player> findByTeamId(Long teamId);
+
+    Optional<Player> findByApiId(Integer apiId);
 }

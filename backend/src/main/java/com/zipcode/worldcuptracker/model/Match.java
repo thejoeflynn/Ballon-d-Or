@@ -1,7 +1,13 @@
 package com.zipcode.worldcuptracker.model;
 
-import jakarta.persistence.*;
 import java.time.LocalDateTime;
+
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 
 @Entity
 public class Match {
@@ -17,6 +23,10 @@ public class Match {
 
     @ManyToOne
     private Team awayTeam;
+
+    @ManyToOne
+    @JoinColumn(name = "venue_id")
+    private Venue venue;
 
     private LocalDateTime kickoffTime;
     private Integer homeScore;
@@ -47,6 +57,7 @@ public class Match {
     public Integer getAwayScore() { return awayScore; }
     public String getStatus() { return status; }
     public String getGroupLabel() { return groupLabel; }
+    public Venue getVenue() { return venue;}
 
     public void setId(Long id) { this.id = id; }
     public void setApiId(Integer apiId) { this.apiId = apiId; }
@@ -57,4 +68,5 @@ public class Match {
     public void setAwayScore(Integer awayScore) { this.awayScore = awayScore; }
     public void setStatus(String status) { this.status = status; }
     public void setGroupLabel(String groupLabel) { this.groupLabel = groupLabel; }
+    public void setVenue(Venue venue) { this.venue = venue;} 
 }

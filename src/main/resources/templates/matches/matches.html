@@ -71,6 +71,8 @@
       min-height: 64px;
       box-shadow: 0 3px 12px rgba(0,0,0,0.12);
       transition: transform 0.12s, box-shadow 0.12s;
+      text-decoration: none;
+      color: inherit;
     }
     .match-card:hover {
       transform: translateY(-1px);
@@ -226,9 +228,10 @@
       <div th:each="entry : ${byDate}" class="date-group">
         <div class="date-label" th:text="${entry.key}">Jun 11</div>
         <div class="match-list">
-          <div th:each="m : ${entry.value}"
-               th:classappend="${m.live} ? ' is-live' : ''"
-               class="match-card">
+          <a th:each="m : ${entry.value}"
+             th:href="@{'/matches/' + ${m.number}}"
+             th:classappend="${m.live} ? ' is-live' : ''"
+             class="match-card">
 
             <!-- Home team -->
             <div class="team-home">
@@ -272,7 +275,7 @@
               <span class="team-abbr-mobile" th:text="${m.awayAbbr}">AWY</span>
             </div>
 
-          </div>
+          </a>
         </div>
       </div>
 

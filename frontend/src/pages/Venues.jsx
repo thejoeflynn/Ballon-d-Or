@@ -47,10 +47,8 @@ export default function Venues() {
 
   return (
     <div className="venues-page">
-      <h1 className="teams-title">Venue Explorer</h1>
-      <p className="muted" style={{ margin: '0.25rem 0 1rem' }}>
-        {venues.length} official FIFA World Cup 2026™ stadiums
-      </p>
+      <h1 className="page-title">Venue Explorer</h1>
+      <p className="page-subtitle">{venues.length} official FIFA World Cup 2026™ stadiums</p>
 
       <div className="group-filter">
         {COUNTRIES.map(c => (

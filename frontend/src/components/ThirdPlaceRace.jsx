@@ -3,8 +3,8 @@ import Flag from './Flag.jsx';
 export default function ThirdPlaceRace({ thirds, cutoff = 8 }) {
   return (
     <div style={{ background: 'var(--surface)', borderRadius: 'var(--radius-card)', border: '1px solid var(--border)', overflow: 'hidden', marginBottom: 32 }}>
-      <div style={{ padding: '10px 16px', background: 'var(--surface-2)', borderBottom: '1px solid var(--border)', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-        <span style={{ fontFamily: 'var(--font-display)', fontWeight: 700, fontSize: '0.9rem', letterSpacing: '0.05em', textTransform: 'uppercase' }}>Wild-card Race — Best Third-Place Teams</span>
+      <div className="card-header" style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+        <span className="section-title">Wild-card Race — Best Third-Place Teams</span>
         <span style={{ color: 'var(--text-muted)', fontSize: '0.8rem' }}>Top {cutoff} qualify</span>
       </div>
       <table style={{ width: '100%', borderCollapse: 'collapse' }}>

@@ -17,19 +17,13 @@ export function getRankedThirds(groups) {
   return [...thirds].sort(cmp).map((t, i) => ({ ...t, thirdRank: i + 1 }));
 }
 
-export function annotateGroups(groups, cutoff = 8) {
-  const rankedThirds = getRankedThirds(groups);
-  const qualifiedSlugs = new Set(
-    rankedThirds.filter(t => t.thirdRank <= cutoff).map(t => t.slug)
-  );
+export function annotateGroups(groups) {
   return groups.map(g => {
     const ranked = rankGroup(g.teams);
-    const annotated = ranked.map(t => {
-      let state = 'out';
-      if (t.rank <= 2) state = 'advance';
-      else if (t.rank === 3 && qualifiedSlugs.has(t.slug)) state = 'wildcard';
-      return { ...t, state };
-    });
+    const annotated = ranked.map(t => ({
+      ...t,
+      state: t.rank <= 2 ? 'advance' : 'none',
+    }));
     return { ...g, teams: annotated };
   });
 }

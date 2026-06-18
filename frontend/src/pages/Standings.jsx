@@ -5,7 +5,6 @@ import { BRACKET_SLOTS, resolveSlot } from '../lib/bracketTemplate.js';
 import Tabs from '../components/Tabs.jsx';
 import Legend from '../components/Legend.jsx';
 import GroupTable from '../components/GroupTable.jsx';
-import ThirdPlaceRace from '../components/ThirdPlaceRace.jsx';
 import ProjectedQualifiers from '../components/ProjectedQualifiers.jsx';
 import ProjectedR32List from '../components/ProjectedR32List.jsx';
 
@@ -27,17 +26,16 @@ export default function Standings() {
 
   return (
     <div>
-      <h1 style={{ fontFamily: 'var(--font-display)', fontWeight: 700, fontSize: 'clamp(1.4rem, 3vw, 2rem)', letterSpacing: '0.03em', textTransform: 'uppercase', margin: '0 0 4px' }}>
-        Standings
-      </h1>
-      <p style={{ color: 'var(--text-muted)', margin: '0 0 20px', fontSize: '0.9rem' }}>
-        Projected — based on standings as of today. Knockouts begin June 28.
+      <h1 className="page-title">Standings</h1>
+      <p className="page-subtitle">
+        {tab === 'bracket'
+          ? 'Projected — based on current group standings.'
+          : 'Group stage results — top 2 from each group advance.'}
       </p>
       <Tabs tabs={TABS} active={tab} onChange={setTab} />
       {tab === 'group' && (
         <>
           <Legend />
-          <ThirdPlaceRace thirds={thirds} cutoff={8} />
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))', gap: 16 }}>
             {annotated.map(g => <GroupTable key={g.id} group={g} />)}
           </div>

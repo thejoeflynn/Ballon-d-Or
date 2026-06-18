@@ -11,8 +11,8 @@ export default function Teams() {
 
   return (
     <div className="page teams-page">
-      <h1 className="teams-title">Teams</h1>
-      <p className="lede">All 48 nations competing at FIFA World Cup 2026™</p>
+      <h1 className="page-title">Teams</h1>
+      <p className="page-subtitle">All 48 nations competing at FIFA World Cup 2026™</p>
 
       {/* Group filter */}
       <div className="group-filter">

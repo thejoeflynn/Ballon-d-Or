@@ -112,10 +112,11 @@ export function mapPlayer(p) {
 export function mapStandings(apiRows) {
   const groupMap = {};
   for (const row of apiRows) {
-    const letter = stripGroup(row.groupLabel);
-    if (!groupMap[letter]) groupMap[letter] = [];
     const slug = nameToSlug(row.teamName);
     const meta = TEAM_META[slug] ?? {};
+    // Use canonical group from team meta; fall back to parsed API label
+    const letter = meta?.group ?? stripGroup(row.groupLabel);
+    if (!groupMap[letter]) groupMap[letter] = [];
     groupMap[letter].push({
       slug,
       name: row.teamName,

@@ -27,10 +27,11 @@ public class StandingsController {
             if (match.getHomeTeam() == null || match.getAwayTeam() == null) continue;
             if (match.getHomeScore() == null || match.getAwayScore() == null) continue;
 
-            if (group != null && !group.equalsIgnoreCase(match.getGroupLabel())) continue;
+            String teamGroup = match.getHomeTeam().getGroupLabel();
+            if (group != null && !group.equalsIgnoreCase(teamGroup)) continue;
 
-            applyMatch(table, match.getHomeTeam(), match.getGroupLabel(), match.getHomeScore(), match.getAwayScore());
-            applyMatch(table, match.getAwayTeam(), match.getGroupLabel(), match.getAwayScore(), match.getHomeScore());
+            applyMatch(table, match.getHomeTeam(), match.getHomeScore(), match.getAwayScore());
+            applyMatch(table, match.getAwayTeam(), match.getAwayScore(), match.getHomeScore());
         }
 
         return table.values().stream()
@@ -42,12 +43,12 @@ public class StandingsController {
                 .toList();
     }
 
-    private void applyMatch(Map<Long, StandingDto> table, Team team, String groupLabel, int goalsFor, int goalsAgainst) {
+    private void applyMatch(Map<Long, StandingDto> table, Team team, int goalsFor, int goalsAgainst) {
         StandingDto row = table.computeIfAbsent(team.getId(), id -> {
             StandingDto s = new StandingDto();
             s.teamId = team.getId();
             s.teamName = team.getName();
-            s.groupLabel = groupLabel;
+            s.groupLabel = team.getGroupLabel();
             return s;
         });
 

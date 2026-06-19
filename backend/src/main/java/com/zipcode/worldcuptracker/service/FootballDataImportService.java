@@ -251,10 +251,7 @@ public class FootballDataImportService {
 
         String groupLabel = extractGroupLabel(round);
 
-        // API-Football often returns "Group Stage"
-        if (groupLabel == null
-                || groupLabel.isBlank()
-                || groupLabel.equalsIgnoreCase("Group Stage")) {
+        if (isBadGroupLabel(groupLabel)) {
 
             String homeFallback = fallbackGroupForTeam(homeTeam.getName());
 
@@ -532,11 +529,11 @@ private boolean isBadGroupLabel(String groupLabel) {
     return groupLabel == null
             || groupLabel.isBlank()
             || groupLabel.equalsIgnoreCase("TBD")
-            || groupLabel.equalsIgnoreCase("Group Stage");
+            || groupLabel.toLowerCase().startsWith("group stage");
 }
 
 private String cleanGroupLabel(String label) {
-    if (label == null || label.isBlank() || label.equalsIgnoreCase("Group Stage")) {
+    if (label == null || label.isBlank() || label.toLowerCase().startsWith("group stage")) {
         return "TBD";
     }
     return label;

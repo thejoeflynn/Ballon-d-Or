@@ -22,3 +22,16 @@
 # virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
 hs_err_pid*
 replay_pid*
+
+# Maven build output (was committed by mistake — contains copies of
+# application.properties, which can carry real secrets via Maven's
+# resource filtering/copy into target/classes)
+target/
+backend/target/
+**/target/
+
+# Local secrets — never commit real keys
+application.properties
+backend/src/main/resources/application.properties
+application-local.properties
+.env

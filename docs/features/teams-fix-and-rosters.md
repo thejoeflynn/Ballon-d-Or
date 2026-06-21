@@ -3,7 +3,64 @@
 > **For:** Claude Code. **Owner:** Joe. **Target:** the `api-integration` branch (API_Data backend + NewCombine UI).
 > Two related fixes: (A) the 3 missing teams, and (B) surface the player/roster data the API already exposes. This is a spec, not code.
 
-## A. Fix the 3 missing teams
+---
+
+> ## ⚠️ RE-VERIFIED 2026-06-21 (against `api-int-TEST`)
+>
+> **Section A below is already implemented and is NOT the current bug.** The throwing
+> `findTeamByApiId` has been replaced by `findOrCreateTeamFromFixture(...)`
+> (`FootballDataImportService.java` ~L406), and `importMatches` uses it — so all 48
+> teams *are* created from fixtures. The remaining "teams not showing up" symptom has a
+> **different root cause: group assignment.** See the new section **"A2. The real bug
+> (group assignment)"** immediately below. Section A is kept for history; Section B
+> (rosters) is still valid and largely unbuilt.
+
+## A2. The real bug (group assignment) — DO THIS
+
+### Symptom
+Some teams are missing from the **Teams page when filtered by group**, and miscategorised
+in standings. Under the "All" filter every team appears; under a specific group letter
+some vanish. This is a grouping/labeling problem, not a missing-row problem.
+
+### Root causes (two, compounding)
+1. **The backend's `fallbackGroupForTeam(name)` draw is wrong/outdated.** Its group
+   letters do **not** match the canonical 2026 draw the frontend uses in
+   `frontend/src/data/mockTeams.js`. Examples of the disagreement:
+   - Backend says Group A = *Mexico, South Africa, South Korea, Czech Republic*.
+   - Canonical (`mockTeams.js`) Group A = *United States, Uruguay, Panama, Curaçao*.
+   - The backend map also lists *Bosnia and Herzegovina* / *Turkey* and other entries
+     that don't line up with the canonical 48. Nearly every group is mismatched.
+2. **It's keyed on fragile English display names.** api-football frequently returns names
+   the `switch` doesn't cover — e.g. `Korea Republic` (not "South Korea"), `IR Iran`,
+   `Türkiye` (not "Turkey"), `Côte d'Ivoire` (not "Ivory Coast"), `Cabo Verde`,
+   `Congo DR`. Those fall through to `"TBD"`. The frontend already handles these aliases
+   in `mappers.js` (`QUIRKS`), but the backend does not — so the team is created with
+   `groupLabel = "TBD"` and disappears from every group-letter view.
+
+A third, related inconsistency: `mapTeam` (Teams page) reads the **API** `groupLabel`
+directly, while `mapStandings` (Standings page) prefers the **canonical** `meta.group`.
+So the two pages can place the same team in different groups.
+
+### Fix (make group assignment authoritative and consistent)
+1. **Prefer api-football Standings as the source of truth.** `refreshGroups()` already
+   pulls `/standings` and sets `team.groupLabel` keyed by **apiId** (reliable, name-proof).
+   Ensure the refresh flow runs it (`POST /api/admin/refresh/groups`) and that it wins over
+   the name fallback. This alone fixes most cases once standings exist.
+2. **Replace the name-keyed fallback with the canonical 2026 draw, keyed by apiId**
+   (or at minimum add every api-football alias from `mappers.js` QUIRKS so no team lands on
+   `"TBD"`). Align the letters to `mockTeams.js`. The fallback should only be a safety net
+   when standings are unavailable.
+3. **Make the frontend consistent:** in `mapTeam` (`mappers.js`), derive `group` from the
+   canonical `meta.group` (same as `mapStandings` does) rather than the raw API label, so
+   Teams and Standings always agree.
+4. **Verify:** `GET /api/teams` returns 48, and every team has a valid `A`–`L` group (none
+   `TBD`); each group letter shows exactly its four teams on the Teams page.
+
+> Also watch slug/asset coverage: any provider name not in `TEAM_META`/`QUIRKS` falls back
+> to `slugify(name)`, which can miss the local crest/flag asset and make a card look broken.
+> Confirm all 48 provider names resolve to a known slug.
+
+## A. (HISTORICAL — already fixed) Fix the 3 missing teams
 
 ### Root cause
 Teams are only created by `importTeams()` (api-football `/teams?league&season`). The fixture importer resolves teams via `FootballDataImportService.findTeamByApiId(apiId)`, which **throws** when a team isn't already saved:

@@ -3,6 +3,62 @@
 > **For:** Claude Code. **Owner:** Joe. **Branch:** current working branch.
 > Pre-match, non-predictive tactical commentary, generated once per match and cached. This is a spec, not code.
 
+---
+
+> ## ✅ STATUS 2026-06-21: feature is BUILT — this is now a PORT, not a build
+>
+> The feature already exists in commit **`73b0ad6`** ("AI comment") on branches
+> **`michaelgiovannisie`** and **`origin/api-integration`**. It is **not** on `api-int-TEST`
+> yet. The task is to **port it onto `api-int-TEST`**. The sections below (§2–§7) remain the
+> design reference, with two real-world deltas:
+> - **Provider:** the implementation uses **Groq** (OpenAI-compatible chat completions,
+>   default model `llama-3.3-70b-versatile`), not Anthropic. A `GeminiCommentaryService`
+>   stub also exists but `CommentaryService` wires **Groq**. (A `MatchController` javadoc
+>   still says "Gemini" — stale comment; ignore.)
+> - **Trigger:** generation is **lazy on first GET** of `/api/matches/{id}/commentary`
+>   (then cached), not a seed/admin POST. Same "generate once, cache forever" guarantee.
+>
+> ### Files to bring over from `73b0ad6` (all currently MISSING on `api-int-TEST`)
+> Backend (`backend/src/main/java/com/zipcode/worldcuptracker/`):
+> - `model/Commentary.java` — entity `{ matchId, content, generatedAt }`
+> - `repository/CommentaryRepository.java` — `findByMatchId(Long)`
+> - `service/CommentaryService.java` — `getOrGenerate(matchId)`: cache-or-generate wrapper
+> - `service/GroqCommentaryService.java` — `generate(Match)`: builds prompt, calls Groq, runs
+>   the leakage-regex guardrail
+> - `service/GeminiCommentaryService.java` — alternate provider stub (carry for parity)
+> - **edit** `controller/MatchController.java` — adds `GET /{id}/commentary` returning
+>   `{ content, generatedAt }`; 404 on unknown match, 503 on generation failure
+>
+> Frontend:
+> - **edit** `frontend/src/lib/api.js` — add `fetchMatchCommentary(id)` (returns `content`
+>   string or `null`)
+> - **edit** `frontend/src/pages/MatchDetail.jsx` — replace the static "Commentary coming
+>   soon" placeholder with loading / present / absent states driven by `fetchMatchCommentary`
+>
+> Config (add to `backend/src/main/resources/application.properties` + `application.example.properties`):
+> ```properties
+> api.groq.base-url=https://api.groq.com
+> api.groq.key=YOUR_GROQ_API_KEY        # keep the real key OUT of committed files
+> api.groq.model=llama-3.3-70b-versatile
+> ```
+>
+> ### How to port (recommended: cherry-pick, then prune)
+> 1. From `api-int-TEST`: `git cherry-pick -n 73b0ad6` (no-commit, so you can clean it up).
+> 2. **Unstage build/IDE noise** that the commit also touched — do NOT bring these:
+>    `backend/target/**`, `frontend/node_modules/**` (e.g. `.vite/deps/_metadata.json`).
+> 3. Resolve any conflict in `MatchController.java`/`api.js`/`MatchDetail.jsx`. On
+>    `api-int-TEST` these three files currently match the commit's *pre-image* exactly, so the
+>    apply should be clean.
+> 4. Put the real `api.groq.key` in your local (gitignored) properties; commit only the
+>    `YOUR_GROQ_API_KEY` placeholder in `application.example.properties`.
+> 5. Build both sides: `mvn clean spring-boot:run` (port 8081) and `npm run build`.
+>
+> ### Acceptance (port)
+> - `GET /api/matches/{id}/commentary` returns one cached paragraph `{content, generatedAt}`;
+>   second call does not re-hit Groq.
+> - Match detail page shows generating → paragraph → graceful "coming soon" states.
+> - No `target/` or `node_modules/` artifacts and no real API key land in the commit.
+
 ## 1. Decisions (from Joe)
 
 - **Voice:** broadcast analyst — energetic but credible, like a TV pundit before kickoff.

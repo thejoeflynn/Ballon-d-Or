@@ -78,14 +78,14 @@ export default function Venues() {
               attribution='&copy; <a href="https://carto.com/">CARTO</a>'
             />
             <FitBounds venues={venues} />
-            {venues.map(v => (
-              <Marker key={v.id} position={[v.lat, v.lng]} icon={markerIcon(v.countryColor)}>
+            {venues.filter(v => v.lat != null && v.lng != null).map(v => (
+              <Marker key={v.id} position={[v.lat, v.lng]} icon={markerIcon(v.countryColor ?? '#FF6B35')}>
                 <Popup>
                   <div className="venue-popup">
                     <div className="venue-popup-flag">{v.flag}</div>
                     <div className="venue-popup-name">{v.name}</div>
                     <div className="venue-popup-city">{v.city}</div>
-                    <div className="venue-popup-cap">{v.capacity.toLocaleString()} seats</div>
+                    <div className="venue-popup-cap">{(v.capacity ?? 0).toLocaleString()} seats</div>
                     <Link to={`/venues/${v.id}`} className="venue-popup-link">
                       View details →
                     </Link>
@@ -104,7 +104,7 @@ export default function Venues() {
             <div className="venue-card-body">
               <div className="venue-card-name">{v.name}</div>
               <div className="venue-card-city">{v.city}</div>
-              <div className="venue-card-cap">{v.capacity.toLocaleString()} seats</div>
+              <div className="venue-card-cap">{(v.capacity ?? 0).toLocaleString()} seats</div>
             </div>
             <span className="venue-card-arrow">→</span>
           </Link>

@@ -344,12 +344,16 @@ public class FootballDataImportService {
         venue = venueRepository.findByNameAndCity(name, city).orElse(new Venue());
     }
 
+    // Always update name and city from fixture data
     venue.setName(name);
     venue.setCity(city != null ? city : "Unknown");
 
     if (venue.getCountry() == null || venue.getCountry().isBlank()) {
         venue.setCountry("Unknown");
     }
+
+    // Never overwrite seeded rich fields (lat/lng/capacity/flag/countryColor/imageUrl)
+    if (venueApiId != null) venue.setApiId(venueApiId);
 
     return venueRepository.save(venue);
 }

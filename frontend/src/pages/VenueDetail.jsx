@@ -155,7 +155,7 @@ export default function VenueDetail() {
             <span className="venue-detail-sep">·</span>
             <span>{venue.country}</span>
             <span className="venue-detail-sep">·</span>
-            <span>{venue.capacity.toLocaleString()} seats</span>
+            <span>{(venue.capacity ?? 0).toLocaleString()} seats</span>
           </div>
         </div>
       </div>
@@ -186,7 +186,7 @@ export default function VenueDetail() {
             </div>
             <div className="venue-stat">
               <span className="venue-stat-label">Capacity</span>
-              <span className="venue-stat-value">{venue.capacity.toLocaleString()}</span>
+              <span className="venue-stat-value">{(venue.capacity ?? 0).toLocaleString()}</span>
             </div>
             <div className="venue-stat">
               <span className="venue-stat-label">Coordinates</span>

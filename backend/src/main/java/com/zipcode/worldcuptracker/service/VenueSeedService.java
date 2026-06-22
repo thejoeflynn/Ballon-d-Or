@@ -1,6 +1,10 @@
 package com.zipcode.worldcuptracker.service;
 
+import java.util.Map;
+
+import com.zipcode.worldcuptracker.model.Team;
 import com.zipcode.worldcuptracker.model.Venue;
+import com.zipcode.worldcuptracker.repository.TeamRepository;
 import com.zipcode.worldcuptracker.repository.VenueRepository;
 import org.springframework.context.event.EventListener;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
@@ -10,15 +14,29 @@ import org.springframework.stereotype.Service;
 public class VenueSeedService {
 
     private final VenueRepository venueRepository;
+    private final TeamRepository teamRepository;
 
-    public VenueSeedService(VenueRepository venueRepository) {
+    // Teams whose group label comes back from the API as "Group Stage - N"
+    // because the API uses generic round names for them.
+    private static final Map<String, String> TEAM_GROUP_FIXES = Map.of(
+        "Bosnia & Herzegovina",    "Group B",
+        "Bosnia & Herzegowina",    "Group B",
+        "Bosnia and Herzegovina",  "Group B",
+        "Türkiye",                 "Group D",
+        "Turkey",                  "Group D",
+        "Cape Verde Islands",      "Group H",
+        "Cape Verde",              "Group H"
+    );
+
+    public VenueSeedService(VenueRepository venueRepository, TeamRepository teamRepository) {
         this.venueRepository = venueRepository;
+        this.teamRepository = teamRepository;
     }
 
     @EventListener(ApplicationReadyEvent.class)
     public void seedVenues() {
-        if (venueRepository.count() > 0) return;
-
+        // Upsert: patch rich fields onto existing API-imported rows, or create new ones.
+        // Never skip just because rows exist — API import leaves lat/lng/capacity null.
         Object[][] rows = {
             // id  name                        city                      country   flag   capacity  lat        lng         imageUrl                      countryColor
             {1,  "MetLife Stadium",           "New York / New Jersey",  "USA",    "🇺🇸", 82500,   40.8136,  -74.0744,  "/images/USA/MetLife",        "#B22234"},
@@ -40,9 +58,12 @@ public class VenueSeedService {
         };
 
         for (Object[] r : rows) {
-            Venue v = new Venue();
-            v.setName((String) r[1]);
-            v.setCity((String) r[2]);
+            String name = (String) r[1];
+            String city = (String) r[2];
+            Venue v = venueRepository.findByNameAndCity(name, city)
+                    .orElseGet(Venue::new);
+            v.setName(name);
+            v.setCity(city);
             v.setCountry((String) r[3]);
             v.setFlag((String) r[4]);
             v.setCapacity((Integer) r[5]);
@@ -51,6 +72,18 @@ public class VenueSeedService {
             v.setImageUrl((String) r[8]);
             v.setCountryColor((String) r[9]);
             venueRepository.save(v);
+        }
+
+        repairTeamGroups();
+    }
+
+    private void repairTeamGroups() {
+        for (Team team : teamRepository.findAll()) {
+            String correct = TEAM_GROUP_FIXES.get(team.getName());
+            if (correct != null && !correct.equals(team.getGroupLabel())) {
+                team.setGroupLabel(correct);
+                teamRepository.save(team);
+            }
         }
     }
 }

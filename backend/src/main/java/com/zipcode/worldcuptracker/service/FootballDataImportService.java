@@ -514,13 +514,13 @@ private String fallbackGroupForTeam(String teamName) {
 
     return switch (teamName) {
         case "Mexico", "South Africa", "South Korea", "Czech Republic", "Czechia" -> "Group A";
-        case "Canada", "Qatar", "Switzerland", "Bosnia and Herzegovina" -> "Group B";
+        case "Canada", "Qatar", "Switzerland", "Bosnia and Herzegovina", "Bosnia & Herzegovina", "Bosnia & Herzegowina" -> "Group B";
         case "Brazil", "Morocco", "Haiti", "Scotland" -> "Group C";
-        case "United States", "USA", "Paraguay", "Australia", "Turkey" -> "Group D";
+        case "United States", "USA", "Paraguay", "Australia", "Turkey", "Türkiye" -> "Group D";
         case "Germany", "Curaçao", "Curacao", "Ivory Coast", "Ecuador" -> "Group E";
         case "Netherlands", "Japan", "Tunisia", "Sweden" -> "Group F";
         case "Belgium", "Egypt", "Iran", "New Zealand" -> "Group G";
-        case "Spain", "Cape Verde", "Saudi Arabia", "Uruguay" -> "Group H";
+        case "Spain", "Cape Verde", "Cape Verde Islands", "Saudi Arabia", "Uruguay" -> "Group H";
         case "France", "Senegal", "Iraq", "Norway" -> "Group I";
         case "Argentina", "Algeria", "Austria", "Jordan" -> "Group J";
         case "Portugal", "DR Congo", "Congo DR", "Uzbekistan", "Colombia" -> "Group K";

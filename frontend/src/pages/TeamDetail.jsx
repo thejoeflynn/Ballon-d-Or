@@ -100,17 +100,15 @@ export default function TeamDetail() {
         <div className="team-detail-banner-overlay" />
         <div className="team-detail-banner-content">
           <Crest slug={team.slug} size="lg" alt={team.name} />
-          <div>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '0.4rem' }}>
-              <Flag slug={team.slug} alt={team.name} className="team-card-flag-chip" loading="lazy" />
-              <span className="team-detail-group">Group {team.group}</span>
-            </div>
+          <div style={{ flex: 1 }}>
+            <span className="team-detail-group">Group {team.group}</span>
             <h1 className="team-detail-name">{team.name}</h1>
             <p className="team-detail-abbr">{team.abbr}</p>
             {team.coach && team.coach !== 'Not available' && (
               <p className="team-detail-coach">Coach: {team.coach}</p>
             )}
           </div>
+          <Flag slug={team.slug} alt={team.name} className="team-detail-flag" />
         </div>
       </div>
 

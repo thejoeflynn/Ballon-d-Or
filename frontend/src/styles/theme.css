@@ -451,6 +451,15 @@ body {
   text-shadow: 0 2px 8px rgba(0,0,0,0.2);
 }
 
+.team-detail-flag {
+  width: 120px;
+  height: 80px;
+  object-fit: contain;
+  border-radius: var(--radius-sm);
+  flex-shrink: 0;
+  filter: drop-shadow(0 2px 8px rgba(0,0,0,0.35));
+}
+
 .team-detail-abbr {
   color: rgba(255,255,255,0.75);
   font-size: 0.9rem;

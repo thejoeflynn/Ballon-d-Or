@@ -53,8 +53,8 @@ public class VenueSeedService {
             {12, "Estadio Azteca",            "Mexico City",            "Mexico", "🇲🇽", 87523,   19.3029,  -99.1505,  "/images/Mexico/Azteca",      "#006847"},
             {13, "Estadio Akron",             "Guadalajara",            "Mexico", "🇲🇽", 45456,   20.6867, -103.4670,  "/images/Mexico/Akron",       "#006847"},
             {14, "Estadio BBVA",              "Monterrey",              "Mexico", "🇲🇽", 53500,   25.6693, -100.2440,  "/images/Mexico/BBVA",        "#006847"},
-            {15, "NRG Stadium",               "Houston",                "USA",    "🇺🇸", 72220,   29.6847,  -95.4107,  "/images/USA/NRG",            "#B22234"},
-            {16, "Rose Bowl",                 "Los Angeles",            "USA",    "🇺🇸", 92542,   34.1614, -118.1676,  "/images/USA/RoseBowl",       "#B22234"},
+            {15, "NRG Stadium",               "Houston",                "USA",    "🇺🇸", 72220,   29.6847,  -95.4107,  "",                           "#B22234"},
+            {16, "Rose Bowl",                 "Los Angeles",            "USA",    "🇺🇸", 92542,   34.1614, -118.1676,  "",                           "#B22234"},
         };
 
         for (Object[] r : rows) {

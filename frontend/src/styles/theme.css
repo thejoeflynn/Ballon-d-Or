@@ -559,27 +559,46 @@ body {
 
 .venue-card {
   display: flex;
-  align-items: center;
-  gap: 12px;
-  padding: 0.65rem 1rem;
+  flex-direction: column;
   background: var(--surface);
   border: 1px solid var(--border);
-  border-radius: var(--radius-sm);
+  border-radius: var(--radius-card);
   text-decoration: none;
   color: var(--text);
   transition: border-color 0.15s, background 0.15s, box-shadow 0.15s;
   backdrop-filter: blur(8px);
+  overflow: hidden;
 }
 .venue-card:hover {
   border-color: rgba(255, 107, 53, 0.5);
   box-shadow: 0 4px 16px rgba(232, 64, 122, 0.15);
+  transform: translateY(-2px);
 }
-.venue-card-flag  { font-size: 1.5rem; flex-shrink: 0; }
-.venue-card-body  { flex: 1; min-width: 0; }
+
+.venue-card-thumb {
+  width: 100%;
+  height: 120px;
+  overflow: hidden;
+  background: var(--surface-2);
+  flex-shrink: 0;
+}
+.venue-card-thumb--empty {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.venue-card-thumb-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+.venue-card-thumb-flag { font-size: 2.5rem; opacity: 0.4; }
+
+.venue-card-body  { flex: 1; min-width: 0; padding: 0.65rem 1rem; }
 .venue-card-name  { font-weight: 700; font-size: 0.88rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; color: var(--dark); }
 .venue-card-city  { font-size: 0.75rem; color: var(--text-muted); }
-.venue-card-cap   { font-size: 0.72rem; color: var(--orange); font-weight: 700; }
-.venue-card-arrow { color: var(--text-muted); font-size: 1rem; flex-shrink: 0; }
+.venue-card-cap   { font-size: 0.72rem; color: var(--orange); font-weight: 700; margin-top: 2px; }
 
 /* ── Venue detail page ────────────────────────────────────────────────── */
 .venue-detail-page { display: flex; flex-direction: column; gap: 0; }
@@ -734,6 +753,93 @@ body {
   border-radius: var(--radius-card);
   color: var(--text-muted);
   font-size: 0.85rem;
+}
+
+/* Match schedule at venue */
+.venue-match-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-card);
+  overflow: hidden;
+}
+
+.venue-match-row {
+  display: grid;
+  grid-template-columns: 90px 1fr auto;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.65rem 1rem;
+  text-decoration: none;
+  color: var(--text);
+  border-bottom: 1px solid var(--border);
+  transition: background 0.12s;
+}
+.venue-match-row:last-child { border-bottom: none; }
+.venue-match-row:hover { background: var(--surface-2); }
+
+.venue-match-date {
+  display: flex;
+  flex-direction: column;
+  font-size: 0.78rem;
+  font-weight: 700;
+  color: var(--text);
+  gap: 1px;
+}
+.venue-match-time { font-size: 0.7rem; color: var(--text-muted); font-weight: 400; }
+
+.venue-match-teams-cell {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  min-width: 0;
+}
+.venue-match-team {
+  font-size: 0.82rem;
+  font-weight: 600;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  flex: 1;
+  min-width: 0;
+}
+.venue-match-team--away { text-align: right; }
+.venue-match-score {
+  font-family: var(--font-display);
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: var(--orange);
+  flex-shrink: 0;
+  white-space: nowrap;
+}
+
+.venue-match-meta {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 2px;
+}
+.venue-match-stage {
+  font-size: 0.68rem;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  white-space: nowrap;
+}
+.venue-match-ft {
+  font-size: 0.65rem;
+  font-weight: 700;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+.venue-match-live {
+  font-size: 0.65rem;
+  font-weight: 700;
+  color: var(--pink);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
 }
 
 /* Attractions */

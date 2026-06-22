@@ -7,6 +7,8 @@ import com.zipcode.worldcuptracker.repository.VenueRepository;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
 
+import java.io.IOException;
+import java.nio.file.*;
 import java.util.*;
 
 @RestController
@@ -66,12 +68,19 @@ public class VenueController {
         if (venue.getImageUrl() == null || venue.getImageUrl().isBlank()) {
             return List.of();
         }
-        // Return numbered image paths; frontend 404s gracefully if files don't exist yet
-        List<String> urls = new ArrayList<>();
-        for (int i = 1; i <= 5; i++) {
-            urls.add(venue.getImageUrl() + "/" + i + ".jpg");
+        String relativePath = venue.getImageUrl();
+        Path dir = Paths.get("src/main/resources/static" + relativePath);
+        if (!Files.isDirectory(dir)) return List.of();
+        try {
+            return Files.list(dir)
+                .filter(p -> !Files.isDirectory(p))
+                .filter(p -> p.getFileName().toString().matches("(?i).*\\.(jpg|jpeg|png|webp|avif)"))
+                .sorted(Comparator.comparing(p -> p.getFileName().toString()))
+                .map(p -> relativePath + "/" + p.getFileName().toString())
+                .toList();
+        } catch (IOException e) {
+            return List.of();
         }
-        return urls;
     }
 
     @GetMapping("/{id}/weather")

@@ -100,13 +100,20 @@ export default function Venues() {
       <div className="venues-grid">
         {venues.map(v => (
           <Link key={v.id} to={`/venues/${v.id}`} className="venue-card">
-            <span className="venue-card-flag">{v.flag}</span>
+            {v.imageUrl ? (
+              <div className="venue-card-thumb">
+                <img src={`${v.imageUrl}/1.jpg`} alt={v.name} className="venue-card-thumb-img" />
+              </div>
+            ) : (
+              <div className="venue-card-thumb venue-card-thumb--empty">
+                <span className="venue-card-thumb-flag">{v.flag}</span>
+              </div>
+            )}
             <div className="venue-card-body">
               <div className="venue-card-name">{v.name}</div>
               <div className="venue-card-city">{v.city}</div>
               <div className="venue-card-cap">{(v.capacity ?? 0).toLocaleString()} seats</div>
             </div>
-            <span className="venue-card-arrow">→</span>
           </Link>
         ))}
       </div>

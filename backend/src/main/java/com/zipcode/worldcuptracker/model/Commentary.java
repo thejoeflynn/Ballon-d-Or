@@ -7,7 +7,6 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.Lob;
 
 /**
  * Cached AI-generated pre-match color commentary for a single Match.
@@ -23,8 +22,7 @@ public class Commentary {
     @Column(unique = true, nullable = false)
     private Long matchId;
 
-    @Lob
-    @Column(nullable = false)
+    @Column(nullable = false, columnDefinition = "TEXT")
     private String content;
 
     private LocalDateTime generatedAt;

@@ -27,9 +27,13 @@ export default function MatchDetail() {
   }, [id]);
 
   useEffect(() => {
+    let cancelled = false;
     setCommentaryLoading(true);
     setCommentary(null);
-    fetchMatchCommentary(id).then(text => { setCommentary(text); setCommentaryLoading(false); });
+    fetchMatchCommentary(id).then(text => {
+      if (!cancelled) { setCommentary(text); setCommentaryLoading(false); }
+    });
+    return () => { cancelled = true; };
   }, [id]);
 
   if (loading) {

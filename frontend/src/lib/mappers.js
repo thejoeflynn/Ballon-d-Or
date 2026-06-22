@@ -24,6 +24,7 @@ const QUIRKS = {
   'south korea': 'south-korea',
   'ivory coast': 'ivory-coast',
   'cape verde': 'cape-verde',
+  'cape verde islands': 'cape-verde',
 };
 
 function slugify(name) {

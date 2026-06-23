@@ -19,6 +19,8 @@
 
   --live: var(--pink);
   --status-advance:  #1db954;
+  --status-runner:   #0EA5E9;
+  --status-third:    #8B5CF6;
   --status-wildcard: var(--gold);
   --status-out:      var(--pink);
 

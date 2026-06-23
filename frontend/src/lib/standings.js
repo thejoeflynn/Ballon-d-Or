@@ -18,12 +18,19 @@ export function getRankedThirds(groups) {
 }
 
 export function annotateGroups(groups) {
-  return groups.map(g => {
-    const ranked = rankGroup(g.teams);
-    const annotated = ranked.map(t => ({
-      ...t,
-      state: t.rank <= 2 ? 'advance' : 'none',
-    }));
+  const rankedGroups = groups.map(g => ({ ...g, teams: rankGroup(g.teams) }));
+  const rankedThirds = getRankedThirds(rankedGroups);
+  const qualifyingThirdKeys = new Set(
+    rankedThirds.filter(t => t.thirdRank <= 8).map(t => `${t.group}:${t.slug}`)
+  );
+  return rankedGroups.map(g => {
+    const annotated = g.teams.map(t => {
+      let state = 'none';
+      if (t.rank === 1) state = 'winner';
+      else if (t.rank === 2) state = 'runner';
+      else if (t.rank === 3 && qualifyingThirdKeys.has(`${g.id}:${t.slug}`)) state = 'third';
+      return { ...t, state };
+    });
     return { ...g, teams: annotated };
   });
 }

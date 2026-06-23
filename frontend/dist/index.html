@@ -3,13 +3,24 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>World Cup Tracker</title>
+    <title>Ballon d'Or — World Cup 2026</title>
     <link rel="icon" type="image/png" href="/logos/app-icon.png" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;600;700&display=swap" rel="stylesheet" />
-    <script type="module" crossorigin src="/assets/index-DRX2mO3_.js"></script>
-    <link rel="stylesheet" crossorigin href="/assets/index-C6sSaifa.css">
+    <script>
+      (function () {
+        var t = localStorage.getItem('theme') || 'System';
+        var s = parseFloat(localStorage.getItem('fontScale')) || 1;
+        var resolved = t === 'System'
+          ? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light')
+          : t.toLowerCase();
+        document.documentElement.setAttribute('data-theme', resolved);
+        document.documentElement.style.setProperty('--font-scale', s);
+      })();
+    </script>
+    <script type="module" crossorigin src="/assets/index-DChgLrPL.js"></script>
+    <link rel="stylesheet" crossorigin href="/assets/index-2INzK5xY.css">
   </head>
   <body>
     <div id="root"></div>

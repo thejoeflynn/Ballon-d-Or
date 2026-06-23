@@ -26,6 +26,33 @@ export const BRACKET_SLOTS = [
   { id: 88, home: 'R-D',           away: 'R-G'           },
 ];
 
+// R16 progression: winner of each R32 pair advances (sequential pairing M73+M74→M89, etc.)
+export const R16_SLOTS = [
+  { id: 89,  home: 'W-73', away: 'W-74' },
+  { id: 90,  home: 'W-75', away: 'W-76' },
+  { id: 91,  home: 'W-77', away: 'W-78' },
+  { id: 92,  home: 'W-79', away: 'W-80' },
+  { id: 93,  home: 'W-81', away: 'W-82' },
+  { id: 94,  home: 'W-83', away: 'W-84' },
+  { id: 95,  home: 'W-85', away: 'W-86' },
+  { id: 96,  home: 'W-87', away: 'W-88' },
+];
+
+export const QF_SLOTS = [
+  { id: 97,  home: 'W-89', away: 'W-90' },
+  { id: 98,  home: 'W-91', away: 'W-92' },
+  { id: 99,  home: 'W-93', away: 'W-94' },
+  { id: 100, home: 'W-95', away: 'W-96' },
+];
+
+export const SF_SLOTS = [
+  { id: 101, home: 'W-97',  away: 'W-98'  },
+  { id: 102, home: 'W-99',  away: 'W-100' },
+];
+
+export const FINAL_SLOT       = { id: 104, home: 'W-101', away: 'W-102' };
+export const THIRD_PLACE_SLOT = { id: 103, home: 'L-101', away: 'L-102' };
+
 /**
  * Resolves a slot string to a team row, or a placeholder descriptor.
  * Returns null only when the team data is genuinely missing.

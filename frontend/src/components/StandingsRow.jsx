@@ -1,11 +1,23 @@
 import { Link } from 'react-router-dom';
 import Flag from './Flag.jsx';
 
+const RAIL_COLOR = {
+  winner: 'var(--status-advance)',
+  runner: 'var(--status-runner)',
+  third:  'var(--status-third)',
+};
+
+const STATE_LABEL = {
+  winner: 'Group winner',
+  runner: 'Runner-up',
+  third:  'Best 3rd (advancing)',
+};
+
 export default function StandingsRow({ row, rank, state = 'none' }) {
-  const rail = state === 'advance' ? 'var(--status-advance)' : 'transparent';
+  const rail = RAIL_COLOR[state] ?? 'transparent';
   return (
     <tr style={{ borderBottom: '1px solid var(--border)', height: 40 }}>
-      <td style={{ width: 4, padding: 0, background: rail, borderRadius: '2px 0 0 2px' }} />
+      <td style={{ width: 4, padding: 0, background: rail, borderRadius: '2px 0 0 2px' }} aria-label={STATE_LABEL[state]} />
       <td style={{ padding: '0 8px', color: 'var(--text-muted)', fontSize: '0.8rem', textAlign: 'center', width: 24 }}>{rank}</td>
       <td style={{ padding: '0 8px' }}>
         <Link

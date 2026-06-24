@@ -5,13 +5,14 @@
   --peach:  #FFAA70;
   --pink:   #E8407A;
   --gold:   #FFB830;
-  --dark:   #2D1200;
+  --dark:   #FFFFFF;   /* "strong text" is white on the dark scheme */
 
-  --surface:   rgba(255, 255, 255, 0.93);
-  --surface-2: rgba(255, 255, 255, 0.70);
-  --border:    rgba(255, 107, 53, 0.18);
-  --text:      #2D1200;
-  --text-muted: rgba(45, 18, 0, 0.52);
+  /* translucent light panels read as slightly-raised charcoal over --page-bg */
+  --surface:   rgba(255, 255, 255, 0.06);
+  --surface-2: rgba(255, 255, 255, 0.10);
+  --border:    rgba(255, 255, 255, 0.12);
+  --text:      #F3F3F4;
+  --text-muted: rgba(243, 243, 244, 0.56);
 
   --brand:          var(--orange);
   --brand-2:        var(--gold);
@@ -33,23 +34,30 @@
   --maxw:         1080px;
   --sidebar-w:    220px;
 
-  --page-bg: linear-gradient(135deg, #C8512A 0%, #C97040 30%, #B03460 70%, #8A2248 100%);
+  /* flat near-black — the hero scrim resolves into this exact colour */
+  --page-bg:     #0B0B0E;
+  --sidebar-bg:  #000000;   /* distinct, darker navigation rail */
+
+  /* Frosted-glass design language (home-only for now; reusable app-wide later).
+     Dark-tinted so white text meets AA over the bright trophy photo. */
+  --glass-bg:        rgba(14, 20, 30, 0.42);
+  --glass-bg-hover:  rgba(14, 20, 30, 0.54);
+  --glass-border:    rgba(255, 255, 255, 0.32);
+  --glass-blur:      5px;
+  --glass-text:      #fff;
 }
 
-[data-theme="dark"] {
-  --page-bg:    linear-gradient(135deg, #1a0f08 0%, #2d1510 30%, #1e0d1a 70%, #12080f 100%);
-  --surface:    rgba(30, 24, 20, 0.88);
-  --surface-2:  rgba(40, 32, 26, 0.72);
-  --border:     rgba(255, 107, 53, 0.22);
-  --text:       #F5EFE9;
-  --text-muted: rgba(245, 239, 233, 0.52);
-  --dark:       #F5EFE9;
-  --shadow-card: 0 4px 20px rgba(0, 0, 0, 0.45);
+/* Reusable frosted-glass utility — apply to any surface that floats over imagery. */
+.glass {
+  background: var(--glass-bg);
+  border: 0.5px solid var(--glass-border);
+  backdrop-filter: blur(var(--glass-blur));
+  color: var(--glass-text);
 }
 
 * { box-sizing: border-box; }
 html, body, #root { height: 100%; }
-html { font-size: calc(100% * var(--font-scale, 1)); }
+html { font-size: calc(106.25% * var(--font-scale, 1)); } /* 17px base */
 
 body {
   margin: 0;
@@ -72,16 +80,15 @@ body {
   width: var(--sidebar-w);
   min-height: 100vh;
   flex-shrink: 0;
-  background: var(--surface);
-  backdrop-filter: blur(16px);
-  border-right: 1.5px solid var(--border);
+  background: var(--sidebar-bg);
+  border-right: 1px solid rgba(0, 0, 0, 0.25);
   display: flex;
   flex-direction: column;
   position: sticky;
   top: 0;
   height: 100vh;
   overflow-y: auto;
-  box-shadow: 4px 0 24px rgba(232, 64, 122, 0.12);
+  box-shadow: 4px 0 24px rgba(0, 0, 0, 0.4);
 }
 
 .sidebar-logo {
@@ -135,7 +142,7 @@ body {
   padding: 0.85rem 1rem;
   border-top: 1px solid var(--border);
   color: var(--text-muted);
-  font-size: 0.75rem;
+  font-size: 0.78rem;
 }
 
 /* ── Mobile top bar ───────────────────────────────────────────────────── */
@@ -294,8 +301,8 @@ body {
   padding: 0.3rem 0.75rem;
   border-radius: var(--radius-pill);
   border: 1.5px solid rgba(255, 107, 53, 0.4);
-  background: rgba(255, 255, 255, 0.45);
-  color: var(--dark);
+  background: var(--surface);
+  color: var(--text);
   font-size: 0.82rem;
   font-weight: 700;
   cursor: pointer;
@@ -304,7 +311,7 @@ body {
   backdrop-filter: blur(6px);
 }
 .group-pill:hover {
-  background: rgba(255, 255, 255, 0.7);
+  background: var(--surface-2);
   border-color: var(--orange);
 }
 .group-pill.is-active {
@@ -315,7 +322,8 @@ body {
 
 .teams-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+  /* rem so cards widen with the text size — keeps names from clipping at XL */
+  grid-template-columns: repeat(auto-fill, minmax(7.2rem, 1fr));
   gap: 12px;
 }
 
@@ -364,8 +372,8 @@ body {
 }
 
 .team-card-flag-chip {
-  width: 24px;
-  height: 16px;
+  width: 1.25rem;
+  height: 0.83rem;
   object-fit: cover;
   border-radius: 3px;
   border: 0.5px solid var(--border);
@@ -388,10 +396,11 @@ body {
   letter-spacing: 0.03em;
   line-height: 1.2;
   color: var(--dark);
+  overflow-wrap: anywhere;   /* wrap long names rather than clip them */
 }
 
 .team-card-group {
-  font-size: 0.72rem;
+  font-size: 0.78rem;
   color: var(--text-muted);
   font-weight: 600;
 }
@@ -472,7 +481,7 @@ body {
 
 .team-detail-group {
   display: inline-block;
-  font-size: 0.75rem;
+  font-size: 0.78rem;
   font-weight: 800;
   color: #fff;
   background: rgba(255,255,255,0.25);
@@ -543,7 +552,7 @@ body {
 .venue-popup-flag { font-size: 1.8rem; line-height: 1; margin-bottom: 4px; }
 .venue-popup-name { font-weight: 700; font-size: 0.9rem; color: var(--dark); margin-bottom: 2px; }
 .venue-popup-city { font-size: 0.78rem; color: var(--text-muted); margin-bottom: 2px; }
-.venue-popup-cap  { font-size: 0.75rem; color: var(--orange); font-weight: 700; margin-bottom: 8px; }
+.venue-popup-cap  { font-size: 0.78rem; color: var(--orange); font-weight: 700; margin-bottom: 8px; }
 .venue-popup-link {
   display: inline-block;
   font-size: 0.78rem;
@@ -599,8 +608,8 @@ body {
 
 .venue-card-body  { flex: 1; min-width: 0; padding: 0.65rem 1rem; }
 .venue-card-name  { font-weight: 700; font-size: 0.88rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; color: var(--dark); }
-.venue-card-city  { font-size: 0.75rem; color: var(--text-muted); }
-.venue-card-cap   { font-size: 0.72rem; color: var(--orange); font-weight: 700; margin-top: 2px; }
+.venue-card-city  { font-size: 0.78rem; color: var(--text-muted); }
+.venue-card-cap   { font-size: 0.78rem; color: var(--orange); font-weight: 700; margin-top: 2px; }
 
 /* ── Venue detail page ────────────────────────────────────────────────── */
 .venue-detail-page { display: flex; flex-direction: column; gap: 0; }
@@ -644,7 +653,7 @@ body {
 
 .venue-section { margin-bottom: 2rem; }
 .venue-section-title {
-  font-size: 0.72rem;
+  font-size: 0.78rem;
   font-weight: 800;
   text-transform: uppercase;
   letter-spacing: 1.5px;
@@ -720,7 +729,7 @@ body {
   right: 14px;
   background: rgba(0,0,0,0.45);
   color: #fff;
-  font-size: 0.75rem;
+  font-size: 0.78rem;
   font-weight: 700;
   padding: 3px 10px;
   border-radius: var(--radius-pill);
@@ -789,7 +798,7 @@ body {
   color: var(--text);
   gap: 1px;
 }
-.venue-match-time { font-size: 0.7rem; color: var(--text-muted); font-weight: 400; }
+.venue-match-time { font-size: 0.78rem; color: var(--text-muted); font-weight: 400; }
 
 .venue-match-teams-cell {
   display: flex;
@@ -823,21 +832,21 @@ body {
   gap: 2px;
 }
 .venue-match-stage {
-  font-size: 0.68rem;
+  font-size: 0.78rem;
   color: var(--text-muted);
   text-transform: uppercase;
   letter-spacing: 0.04em;
   white-space: nowrap;
 }
 .venue-match-ft {
-  font-size: 0.65rem;
+  font-size: 0.78rem;
   font-weight: 700;
   color: var(--text-muted);
   text-transform: uppercase;
   letter-spacing: 0.05em;
 }
 .venue-match-live {
-  font-size: 0.65rem;
+  font-size: 0.78rem;
   font-weight: 700;
   color: var(--pink);
   text-transform: uppercase;
@@ -868,7 +877,7 @@ body {
 .venue-weather-icon { font-size: 2.5rem; line-height: 1; }
 .venue-weather-temp { font-size: 1.6rem; font-weight: 800; color: var(--dark); }
 .venue-weather-label { font-size: 0.82rem; color: var(--text-muted); margin-top: 2px; }
-.venue-weather-wind { font-size: 0.75rem; color: var(--text-muted); margin-top: 2px; }
+.venue-weather-wind { font-size: 0.78rem; color: var(--text-muted); margin-top: 2px; }
 .venue-weather-loading { color: var(--text-muted); font-size: 0.85rem; }
 .venue-weather-error { color: var(--text-muted); font-size: 0.85rem; font-style: italic; }
 
@@ -879,23 +888,346 @@ body {
   gap: 1.5rem;
 }
 
-.home-hero {
-  padding: 2.5rem 2rem;
-  text-align: center;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 0.5rem;
+/* ── Immersive trophy hero (full-bleed band) ────────────────────────────── */
+/* Let the home page manage its own width so the hero can escape the cap. */
+.app-main > .home-page { max-width: none; margin: 0; }
+/* keep the readable sections below the hero centered at the normal max-width */
+.home-page > .home-strip-section,
+.home-page > .home-nav-grid {
+  width: 100%;
+  max-width: var(--maxw);
+  align-self: center;
 }
 
-.home-hero .page-title {
-  font-size: clamp(2rem, 5vw, 3rem);
-  color: var(--orange);
-  background: var(--brand-gradient);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
+/* Shared full-bleed band (Home / Standings / Matches) — one place for sizing.
+   Each page adds its own photo + scrim via a page-specific class below. */
+.immersive-hero {
+  position: relative;
+  /* full-bleed: cancel .app-main padding, span edge-to-edge, no card framing */
+  margin: -1.5rem -1.25rem 0;
+  max-width: none;
+  min-height: clamp(480px, 54vh, 540px);
+  overflow: hidden;
+  background-color: #0B0B0E;
+  background-repeat: no-repeat;
 }
-.home-hero .page-subtitle { margin: 0; font-size: 1.05rem; }
+.immersive-hero-content {
+  position: relative;
+  z-index: 1;
+  max-width: var(--maxw);
+  margin: 0 auto;
+  min-height: clamp(480px, 54vh, 540px);
+  padding: 2rem 1.25rem 1.75rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;   /* head-only heroes anchor content to the bottom scrim */
+  gap: 1.25rem;
+}
+
+/* Home: trophy photo + left scrim (text contrast) + bottom scrim into the page */
+.home-hero-immersive {
+  background-color: #3c87a6;
+  background-image:
+    linear-gradient(90deg, rgba(0,0,0,0.40), rgba(0,0,0,0.08) 46%, transparent 64%),
+    linear-gradient(180deg, rgba(11,11,14,0) 32%, rgba(11,11,14,0.55) 76%, rgba(11,11,14,1) 100%),
+    url('/hero-trophy.jpg');
+  background-size: cover, cover, cover;
+  background-position: center, center, 62% center;
+}
+.home-hero-content { justify-content: space-between; }
+.home-hero-head { max-width: 62%; }
+
+.home-hero-title {
+  font-family: var(--font-display);
+  font-size: clamp(2rem, 5vw, 3rem);
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: #fff;
+  line-height: 1.05;
+  margin: 0.6rem 0 0.15rem;
+  text-shadow: 0 2px 10px rgba(0,0,0,0.28);
+}
+.home-hero-tagline {
+  margin: 0;
+  color: rgba(255,255,255,0.92);
+  font-size: 1rem;
+  text-shadow: 0 1px 6px rgba(0,0,0,0.3);
+}
+
+/* Hero text overrides (countdown is white over the photo, left-aligned) */
+.home-hero-immersive .home-countdown { margin-top: 1.1rem; align-items: flex-start; }
+.home-hero-immersive .home-countdown-label {
+  color: rgba(255,255,255,0.9);
+  text-shadow: 0 1px 6px rgba(0,0,0,0.35);
+}
+.home-hero-immersive .home-countdown-num {
+  color: #fff;
+  background: none;
+  -webkit-text-fill-color: #fff;
+  text-shadow: 0 2px 12px rgba(0,0,0,0.34);
+}
+.home-hero-immersive .home-countdown-unit { color: rgba(255,255,255,0.85); }
+.home-hero-immersive .home-concluded {
+  color: rgba(255,255,255,0.92);
+  text-shadow: 0 1px 6px rgba(0,0,0,0.35);
+}
+
+/* Side-scrolling glass match rail */
+.home-hero-rail {
+  display: flex;
+  gap: 0.75rem;
+  overflow-x: auto;
+  overflow-y: hidden;
+  padding-bottom: 8px;
+  scroll-snap-type: x mandatory;
+  scroll-behavior: smooth;
+  /* soft fade on the right edge to signal more content */
+  -webkit-mask-image: linear-gradient(to right, #000 90%, transparent 100%);
+          mask-image: linear-gradient(to right, #000 90%, transparent 100%);
+  /* slim subtle scrollbar */
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255,255,255,0.4) transparent;
+}
+.home-hero-rail::-webkit-scrollbar { height: 7px; }
+.home-hero-rail::-webkit-scrollbar-thumb {
+  background: rgba(255,255,255,0.4);
+  border-radius: 999px;
+}
+.home-hero-rail::-webkit-scrollbar-track { background: transparent; }
+.home-hero-rail > * { scroll-snap-align: start; }
+
+/* compound selector beats the later-defined base .home-match-card; glass via tokens */
+.home-match-card.home-match-card--glass {
+  background: var(--glass-bg);
+  border: 0.5px solid var(--glass-border);
+  backdrop-filter: blur(var(--glass-blur));
+  color: var(--glass-text);
+  /* rem so the card scales WITH the text size — keeps abbrs from clipping at XL */
+  flex: 0 0 13rem;
+}
+.home-match-card.home-match-card--glass:hover {
+  background: var(--glass-bg-hover);
+  border-color: rgba(255,255,255,0.7);
+}
+.home-match-card--glass .home-match-stage,
+.home-match-card--glass .home-match-abbr,
+.home-match-card--glass .home-match-scoreline,
+.home-match-card--glass .home-match-vs,
+.home-match-card--glass .home-match-ft,
+.home-match-card--glass .home-match-time {
+  color: #fff;
+}
+.home-match-card--glass .home-match-stage,
+.home-match-card--glass .home-match-time { color: rgba(255,255,255,0.82); }
+
+/* trailing "All matches →" card at the end of the rail */
+.home-rail-more {
+  flex: 0 0 150px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+  gap: 0.25rem;
+  border-radius: var(--radius-card);
+  padding: 0.75rem 1rem;
+  text-decoration: none;
+  font-family: var(--font-display);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  transition: background 0.15s, border-color 0.15s;
+}
+.home-rail-more:hover {
+  background: var(--glass-bg-hover);
+  border-color: rgba(255,255,255,0.7);
+}
+.home-rail-more-label { font-size: 0.95rem; font-weight: 700; }
+.home-rail-more-arrow { font-size: 1.4rem; line-height: 1; }
+
+/* ── Standings: immersive stadium hero + side-scrolling group rail ──────── */
+.app-main > .standings-page { max-width: none; margin: 0; }
+.standings-page { display: flex; flex-direction: column; }
+.standings-page > .standings-below {
+  width: 100%;
+  max-width: var(--maxw);
+  align-self: center;
+  margin-top: 1.5rem;
+}
+
+/* Standings: stadium photo + strong scrim (busy/bright image) into the page */
+.standings-hero {
+  background-image:
+    linear-gradient(180deg, rgba(11,11,14,0.55) 0%, rgba(11,11,14,0.20) 26%, rgba(11,11,14,0.62) 72%, rgba(11,11,14,1) 100%),
+    url('/standings-image.jpg');
+  background-size: cover, cover;
+  background-position: center, center 32%;
+}
+
+.standings-hero-title {
+  font-family: var(--font-display);
+  font-size: clamp(1.8rem, 4vw, 2.6rem);
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: #fff;
+  margin: 0 0 0.2rem;
+  text-shadow: 0 2px 12px rgba(0,0,0,0.55);
+}
+.standings-hero-sub {
+  margin: 0 0 0.5rem;
+  color: rgba(255,255,255,0.92);
+  font-size: 1rem;
+  text-shadow: 0 1px 8px rgba(0,0,0,0.5);
+}
+/* tab labels need a shadow to read over the photo */
+.standings-hero-head .tabs button,
+.standings-hero-head button { text-shadow: 0 1px 6px rgba(0,0,0,0.5); }
+
+/* groups: vertical grid, two per row (roomier tables, scales better at XL) */
+.standings-groups-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+  margin-top: 1rem;
+}
+@media (max-width: 640px) {
+  .standings-groups-grid { grid-template-columns: 1fr; }
+}
+
+.group-table-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-card);
+  overflow: hidden;
+}
+
+.standings-empty-banner {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-card);
+  padding: 10px 14px;
+  margin-bottom: 16px;
+  font-size: 0.82rem;
+  color: var(--text-muted);
+}
+
+/* ── Matches: immersive pitch hero (mirrors the Standings hero) ─────────── */
+.app-main > .matches-page { max-width: none; margin: 0; }
+.matches-page { display: flex; flex-direction: column; }
+.matches-page > .matches-below {
+  width: 100%;
+  max-width: var(--maxw);
+  align-self: center;
+  margin-top: 1.5rem;
+}
+
+/* Matches: top-down pitch + scrim into the page */
+.matches-hero {
+  background-image:
+    linear-gradient(180deg, rgba(11,11,14,0.50) 0%, rgba(11,11,14,0.18) 28%, rgba(11,11,14,0.60) 72%, rgba(11,11,14,1) 100%),
+    url('/matches-image.jpg');
+  background-size: cover, cover;
+  background-position: center, center;
+}
+.matches-hero-content { justify-content: flex-end; } /* anchor controls toward the bottom scrim */
+
+.matches-hero-title {
+  font-family: var(--font-display);
+  font-size: clamp(1.8rem, 4vw, 2.6rem);
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: #fff;
+  margin: 0 0 0.2rem;
+  text-shadow: 0 2px 12px rgba(0,0,0,0.55);
+}
+.matches-hero-sub {
+  margin: 0 0 0.9rem;
+  color: rgba(255,255,255,0.92);
+  font-size: 1rem;
+  text-shadow: 0 1px 8px rgba(0,0,0,0.5);
+}
+.matches-hero .date-nav { margin-bottom: 0; }
+
+/* date pills need a dark frosted backing to read over the pitch */
+.matches-hero .date-nav-day {
+  background: rgba(10,14,22,0.5);
+  border-color: rgba(255,255,255,0.22);
+  color: rgba(255,255,255,0.88);
+  backdrop-filter: blur(3px);
+}
+.matches-hero .date-nav-day:hover {
+  border-color: var(--orange);
+  color: #fff;
+}
+.matches-hero .date-nav-day.is-selected {
+  background: var(--orange);
+  border-color: var(--orange);
+  color: #fff;
+}
+.matches-hero .group-pill {
+  background: rgba(10,14,22,0.5);
+  border-color: rgba(255,107,53,0.55);
+  color: #fff;
+  backdrop-filter: blur(3px);
+}
+
+/* ── Venues: immersive stadium hero ────────────────────────────────────── */
+.app-main > .venues-page { max-width: none; margin: 0; }
+.venues-page > .venues-below {
+  width: 100%;
+  max-width: var(--maxw);
+  align-self: center;
+  margin-top: 1.5rem;
+}
+
+.venues-hero {
+  background-image:
+    linear-gradient(180deg, rgba(11,11,14,0.45) 0%, rgba(11,11,14,0.15) 30%, rgba(11,11,14,0.62) 74%, rgba(11,11,14,1) 100%),
+    url('/venue-image.jpg');
+  background-size: cover, cover;
+  background-position: center, center;
+}
+.venues-hero-title {
+  font-family: var(--font-display);
+  font-size: clamp(1.8rem, 4vw, 2.6rem);
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: #fff;
+  margin: 0 0 0.2rem;
+  text-shadow: 0 2px 12px rgba(0,0,0,0.55);
+}
+.venues-hero-sub {
+  margin: 0 0 0.9rem;
+  color: rgba(255,255,255,0.92);
+  font-size: 1rem;
+  text-shadow: 0 1px 8px rgba(0,0,0,0.5);
+}
+.venues-hero .group-filter { margin-bottom: 0; }
+.venues-hero .group-pill {
+  background: rgba(10,14,22,0.5);
+  border-color: rgba(255,107,53,0.55);
+  color: #fff;
+  backdrop-filter: blur(3px);
+}
+
+
+@media (max-width: 767px) {
+  .home-hero-immersive {
+    min-height: clamp(260px, 42vh, 360px);
+    /* narrow viewport is height-bound: pan left so the centred trophy sits on
+       the right and the title stays clear of it */
+    background-position: center, center, 12% center;
+  }
+  .home-hero-content {
+    min-height: clamp(260px, 42vh, 360px);
+    padding: 1.25rem;
+  }
+  .home-hero-head { max-width: 100%; }
+  .home-hero-cards { flex-wrap: nowrap; overflow-x: auto; }
+  .home-match-card--glass, .home-hero-shortcut { flex: 0 0 78%; }
+}
 
 .home-status-band {
   display: inline-flex;
@@ -971,13 +1303,7 @@ body {
   .home-nav-card { transition: none; }
 }
 
-/* ── Phase badge ────────────────────────────────────────────────────────── */
-.home-hero-phase-row {
-  display: flex;
-  justify-content: center;
-  margin-bottom: 0.5rem;
-}
-
+/* ── Phase badge (light pill, reads over the sky photo) ─────────────────── */
 .home-phase-badge {
   display: inline-flex;
   align-items: center;
@@ -985,19 +1311,14 @@ body {
   padding: 0.3rem 0.9rem;
   border-radius: var(--radius-pill);
   font-family: var(--font-display);
-  font-size: 0.75rem;
+  font-size: 0.78rem;
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.06em;
-  background: rgba(255, 107, 53, 0.12);
-  border: 1px solid rgba(255, 107, 53, 0.3);
-  color: var(--orange);
-}
-
-.home-phase-badge--live {
-  background: rgba(232, 64, 122, 0.12);
-  border-color: rgba(232, 64, 122, 0.35);
-  color: var(--pink);
+  background: rgba(255, 255, 255, 0.85);
+  border: 1px solid rgba(255, 255, 255, 0.6);
+  color: #2D1200; /* fixed dark — pill is always light in both themes */
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.18);
 }
 
 .home-phase-live-dot {
@@ -1129,7 +1450,7 @@ body {
 }
 
 .home-match-stage {
-  font-size: 0.7rem;
+  font-size: 0.78rem;
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.05em;
@@ -1146,7 +1467,7 @@ body {
 .home-match-team {
   display: flex;
   align-items: center;
-  gap: 6px;
+  gap: 0.3rem;
   flex: 1;
   min-width: 0;
   overflow: hidden;
@@ -1158,8 +1479,8 @@ body {
 }
 
 .home-match-flag {
-  width: 22px;
-  height: 15px;
+  width: 1.15rem;   /* rem so flags scale with the card/text at XL */
+  height: 0.78rem;
   object-fit: cover;
   border-radius: 2px;
   flex-shrink: 0;
@@ -1180,9 +1501,9 @@ body {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 3px;
+  gap: 0.15rem;
   flex-shrink: 0;
-  min-width: 52px;
+  min-width: 2.7rem;
 }
 
 .home-match-scoreline {
@@ -1194,19 +1515,19 @@ body {
 }
 
 .home-match-vs {
-  font-size: 0.75rem;
+  font-size: 0.78rem;
   color: var(--text-muted);
   font-weight: 600;
 }
 
 .home-match-time {
-  font-size: 0.7rem;
+  font-size: 0.78rem;
   color: var(--text-muted);
   font-weight: 600;
 }
 
 .home-match-ft {
-  font-size: 0.65rem;
+  font-size: 0.78rem;
   font-weight: 700;
   color: var(--text-muted);
   text-transform: uppercase;
@@ -1238,22 +1559,6 @@ body {
   border-radius: 3px;
 }
 
-/* ── Dark mode overrides for hardcoded white backgrounds ──────────────── */
-[data-theme="dark"] .group-pill {
-  background: rgba(255, 107, 53, 0.12);
-  color: var(--text);
-}
-[data-theme="dark"] .group-pill:hover {
-  background: rgba(255, 107, 53, 0.22);
-  border-color: var(--orange);
-}
-[data-theme="dark"] .mobile-topbar {
-  background: rgba(0, 0, 0, 0.35);
-  border-color: rgba(255, 255, 255, 0.08);
-}
-[data-theme="dark"] .sidebar-link:hover { color: var(--text); }
-[data-theme="dark"] .drawer-close:hover { color: var(--text); }
-
 /* ── Settings panel ────────────────────────────────────────────────────── */
 .sidebar-footer {
   position: relative;
@@ -1263,7 +1568,7 @@ body {
 }
 
 .sidebar-footer-label {
-  font-size: 0.75rem;
+  font-size: 0.78rem;
   color: var(--text-muted);
 }
 
@@ -1299,7 +1604,7 @@ body {
 .settings-section:last-child { margin-bottom: 0; }
 
 .settings-label {
-  font-size: 0.68rem;
+  font-size: 0.78rem;
   font-weight: 800;
   text-transform: uppercase;
   letter-spacing: 0.07em;
@@ -1382,7 +1687,7 @@ body {
   line-height: 1;
 }
 .day-mon {
-  font-size: 0.62rem;
+  font-size: 0.78rem;
   text-transform: uppercase;
   letter-spacing: 0.04em;
   color: inherit;
@@ -1415,7 +1720,7 @@ body {
 .match-row:hover { background: var(--surface-2); }
 
 .match-row-status {
-  width: 64px;
+  width: 4.25rem;   /* rem so it scales with the text and the time stays on one line */
   flex-shrink: 0;
   display: flex;
   flex-direction: column;
@@ -1427,9 +1732,10 @@ body {
   font-weight: 700;
   font-size: 0.82rem;
   color: var(--text);
+  white-space: nowrap;
 }
 .match-row-minute {
-  font-size: 0.72rem;
+  font-size: 0.78rem;
   color: var(--text-muted);
 }
 
@@ -1476,7 +1782,7 @@ body {
 }
 
 .match-row-venue {
-  font-size: 0.72rem;
+  font-size: 0.78rem;
   color: var(--text-muted);
   white-space: nowrap;
   overflow: hidden;
@@ -1540,7 +1846,7 @@ body {
   text-align: center;
 }
 .match-detail-abbr {
-  font-size: 0.72rem;
+  font-size: 0.78rem;
   color: var(--text-muted);
   text-transform: uppercase;
 }
@@ -1560,7 +1866,7 @@ body {
   line-height: 1;
 }
 .match-detail-stage {
-  font-size: 0.72rem;
+  font-size: 0.78rem;
   color: var(--text-muted);
   text-transform: uppercase;
   letter-spacing: 0.05em;
@@ -1643,7 +1949,7 @@ body {
 }
 
 .squad-section-title {
-  font-size: 0.7rem;
+  font-size: 0.78rem;
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.08em;
@@ -1686,7 +1992,7 @@ body {
   border-radius: 50%;
   background: linear-gradient(135deg, var(--orange), var(--pink));
   color: #fff;
-  font-size: 0.7rem;
+  font-size: 0.78rem;
   font-weight: 700;
   display: flex;
   align-items: center;
@@ -1743,30 +2049,6 @@ body {
 .group-table-header[data-group="J"]::before { background: var(--group-J); }
 .group-table-header[data-group="K"]::before { background: var(--group-K); }
 .group-table-header[data-group="L"]::before { background: var(--group-L); }
-
-/* ── Hero sheen animation ──────────────────────────────────────────────── */
-@keyframes hero-sheen {
-  0%   { transform: translateX(-120%) skewX(-15deg); }
-  100% { transform: translateX(220%)  skewX(-15deg); }
-}
-
-.home-hero {
-  position: relative;
-  overflow: hidden;
-}
-.home-hero::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(90deg, transparent 0%, rgba(255,255,255,0.12) 50%, transparent 100%);
-  width: 40%;
-  animation: hero-sheen 4s ease-in-out infinite;
-  pointer-events: none;
-  aria-hidden: true;
-}
-@media (prefers-reduced-motion: reduce) {
-  .home-hero::before { display: none; }
-}
 
 /* ── LIVE pulse ────────────────────────────────────────────────────────── */
 @keyframes live-pulse {

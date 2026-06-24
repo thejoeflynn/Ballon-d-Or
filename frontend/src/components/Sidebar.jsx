@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { NavLink, useLocation } from 'react-router-dom';
 import Logo from './Logo.jsx';
-import { useSettings, THEMES, FONT_SCALES } from '../context/SettingsContext.jsx';
+import { useSettings, FONT_SCALES } from '../context/SettingsContext.jsx';
 
 const links = [
   { to: '/',          label: 'Home',      end: true, icon: <IconHome /> },
@@ -17,7 +17,7 @@ export default function Sidebar() {
   const location = useLocation();
   const drawerRef = useRef(null);
   const settingsBtnRef = useRef(null);
-  const { theme, setTheme, fontScale, setFontScale } = useSettings();
+  const { fontScale, setFontScale } = useSettings();
 
   // Close drawer on route change
   useEffect(() => { setOpen(false); }, [location.pathname]);
@@ -87,21 +87,6 @@ export default function Sidebar() {
       role="dialog"
       aria-label="Accessibility settings"
     >
-      <div className="settings-section">
-        <p className="settings-label">Theme</p>
-        <div className="settings-row">
-          {THEMES.map(t => (
-            <button
-              key={t}
-              className={'settings-option' + (theme === t ? ' is-active' : '')}
-              aria-pressed={theme === t}
-              onClick={() => setTheme(t)}
-            >
-              {t}
-            </button>
-          ))}
-        </div>
-      </div>
       <div className="settings-section">
         <p className="settings-label">Text size</p>
         <div className="settings-row">

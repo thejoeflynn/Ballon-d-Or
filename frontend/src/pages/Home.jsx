@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { fetchMatches } from '../lib/api.js';
 import Flag from '../components/Flag.jsx';
 import Pill from '../components/Pill.jsx';
+import ImmersiveHero from '../components/ImmersiveHero.jsx';
 
 // ── Tournament phase ─────────────────────────────────────────────────────────
 
@@ -58,13 +59,13 @@ function CountdownNumerals({ target, label }) {
 
 // ── Match strip ──────────────────────────────────────────────────────────────
 
-function MatchStripCard({ match }) {
+function MatchStripCard({ match, glass }) {
   const isLive     = match.status === 'LIVE';
   const isFinished = match.status === 'FINISHED';
   const hasScore   = match.homeScore !== null && match.awayScore !== null;
 
   return (
-    <Link to={`/matches/${match.id}`} className="home-match-card">
+    <Link to={`/matches/${match.id}`} className={`home-match-card${glass ? ' home-match-card--glass' : ''}`}>
       <div className="home-match-stage">{match.stage}</div>
       <div className="home-match-teams">
         <div className="home-match-team">
@@ -152,33 +153,60 @@ export default function Home() {
 
   const isConcluded = phase === 'Concluded';
 
+  const loading = matches === null;
+  // The hero rail shows today's matches, falling back to upcoming SCHEDULED.
+  const railMatches = matches === null ? null
+    : todayMatches?.length > 0 ? todayMatches.slice(0, 10)
+    : matches.filter(m => m.status === 'SCHEDULED').slice(0, 10);
+  const heroHasCards = railMatches?.length > 0;
+  // The hero owns the matches; only fall back to the strip section below when
+  // the hero has no match cards of its own (avoids duplication).
+  const showStrip = !loading && !heroHasCards;
+
   return (
     <div className="home-page">
 
-      {/* ── Hero ── */}
-      <div className="home-hero surface-card">
-        <div className="home-hero-phase-row">
-          <span className={`home-phase-badge${phase !== 'Countdown' && !isConcluded ? ' home-phase-badge--live' : ''}`}>
-            {phase}
-            {liveMatches.length > 0 && <span className="home-phase-live-dot" aria-hidden="true" />}
-          </span>
+      {/* ── Immersive trophy hero ── */}
+      <ImmersiveHero className="home-hero-immersive" contentClassName="home-hero-content">
+          <div className="home-hero-head">
+            <span className="home-phase-badge">
+              {phase}
+              {liveMatches.length > 0 && <span className="home-phase-live-dot" aria-hidden="true" />}
+            </span>
+
+            <h1 className="home-hero-title">Ballon d'Or</h1>
+            <p className="home-hero-tagline">Your guide to the FIFA World Cup 2026™</p>
+
+            {!isConcluded && target && <CountdownNumerals target={target} label={targetLabel} />}
+            {isConcluded && <p className="home-concluded">FIFA World Cup 2026™ has concluded</p>}
+          </div>
+
+          <div className="home-hero-rail">
+            {loading
+              ? [0, 1, 2, 3].map(i => (
+                  <div key={i} className="home-match-card home-match-card--glass home-match-card--skeleton" />
+                ))
+              : railMatches.map(m => <MatchStripCard key={m.id} match={m} glass />)}
+
+            {heroHasCards && (
+              <Link to="/matches" className="home-rail-more glass">
+                <span className="home-rail-more-label">All matches</span>
+                <span className="home-rail-more-arrow" aria-hidden="true">→</span>
+              </Link>
+            )}
+          </div>
+      </ImmersiveHero>
+
+      {/* ── Today / Up next (only when the hero isn't already showing them) ── */}
+      {showStrip && (
+        <div className="home-strip-section">
+          <div className="home-strip-header">
+            <span className="section-title">{stripLabel}</span>
+            <Link to="/matches" className="home-strip-more">All matches →</Link>
+          </div>
+          <MatchStrip matches={stripMatches} />
         </div>
-
-        <h1 className="page-title" style={{ marginBottom: 0 }}>Ballon d'Or</h1>
-        <p className="page-subtitle">Your guide to the FIFA World Cup 2026™</p>
-
-        {!isConcluded && target && <CountdownNumerals target={target} label={targetLabel} />}
-        {isConcluded && <p className="home-concluded">FIFA World Cup 2026™ has concluded</p>}
-      </div>
-
-      {/* ── Today / Up next ── */}
-      <div className="home-strip-section">
-        <div className="home-strip-header">
-          <span className="section-title">{stripLabel}</span>
-          <Link to="/matches" className="home-strip-more">All matches →</Link>
-        </div>
-        <MatchStrip matches={stripMatches} />
-      </div>
+      )}
 
       {/* ── Quick-nav cards ── */}
       <div className="home-nav-grid">

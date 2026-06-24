@@ -4,6 +4,7 @@ import { fetchMatches } from '../lib/api.js';
 import { useFavorites } from '../context/FavoritesContext.jsx';
 import Flag from '../components/Flag.jsx';
 import Pill from '../components/Pill.jsx';
+import ImmersiveHero from '../components/ImmersiveHero.jsx';
 
 const TODAY = new Date().toISOString().slice(0, 10);
 
@@ -102,62 +103,71 @@ export default function Matches() {
   const subtitle = selectedDate === TODAY ? "Today's matches" : `Matches on ${subtitleDate}`;
 
   return (
-    <div className="page">
-      <h1 className="page-title">Matches</h1>
-      <p className="page-subtitle">{subtitle} · times in your local timezone</p>
+    <div className="matches-page">
 
-      {/* Date navigator */}
-      <div className="date-nav">
-        <button className="group-pill date-nav-today" onClick={() => setSelectedDate(clampedToday)}>
-          Today
-        </button>
-        {dates.map(d => {
-          const dt = new Date(d + 'T12:00:00');
-          const hasStarred = allMatches.filter(m => m.date === d).some(m => starredMatches.has(m.id));
-          return (
+      {/* ── Immersive pitch hero ── */}
+      <ImmersiveHero className="matches-hero" contentClassName="matches-hero-content">
+          <div className="matches-hero-head">
+            <h1 className="matches-hero-title">Matches</h1>
+            <p className="matches-hero-sub">{subtitle} · times in your local timezone</p>
+
+            {/* Date navigator */}
+            <div className="date-nav">
+              <button className="group-pill date-nav-today" onClick={() => setSelectedDate(clampedToday)}>
+                Today
+              </button>
+              {dates.map(d => {
+                const dt = new Date(d + 'T12:00:00');
+                const hasStarred = allMatches.filter(m => m.date === d).some(m => starredMatches.has(m.id));
+                return (
+                  <button
+                    key={d}
+                    className={'date-nav-day' + (d === selectedDate ? ' is-selected' : '')}
+                    onClick={() => setSelectedDate(d)}
+                  >
+                    <span className="day-num">{dt.getDate()}</span>
+                    <span className="day-mon">{dt.toLocaleDateString(undefined, { month: 'short' })}</span>
+                    {hasStarred && <span className="day-star" />}
+                  </button>
+                );
+              })}
+            </div>
+          </div>
+      </ImmersiveHero>
+
+      {/* ── Below the hero (centered column) ── */}
+      <div className="matches-below">
+        {/* Filter chips */}
+        <div className="group-filter" style={{ marginBottom: 12 }}>
+          {[['all', 'All'], ['myteams', 'My teams'], ['starred', 'Starred']].map(([id, label]) => (
             <button
-              key={d}
-              className={'date-nav-day' + (d === selectedDate ? ' is-selected' : '')}
-              onClick={() => setSelectedDate(d)}
+              key={id}
+              className={'group-pill' + (filter === id ? ' is-active' : '')}
+              onClick={() => setFilter(id)}
             >
-              <span className="day-num">{dt.getDate()}</span>
-              <span className="day-mon">{dt.toLocaleDateString(undefined, { month: 'short' })}</span>
-              {hasStarred && <span className="day-star" />}
+              {label}
             </button>
-          );
-        })}
-      </div>
+          ))}
+        </div>
 
-      {/* Filter chips */}
-      <div className="group-filter" style={{ marginBottom: 12 }}>
-        {[['all', 'All'], ['myteams', 'My teams'], ['starred', 'Starred']].map(([id, label]) => (
-          <button
-            key={id}
-            className={'group-pill' + (filter === id ? ' is-active' : '')}
-            onClick={() => setFilter(id)}
-          >
-            {label}
-          </button>
-        ))}
-      </div>
-
-      {/* Match list */}
-      <div style={{ background: 'var(--surface)', borderRadius: 'var(--radius-card)', border: '1px solid var(--border)', overflow: 'hidden' }}>
-        {allMatches.length === 0 ? (
-          <p style={{ padding: '24px 16px', color: 'var(--text-muted)', textAlign: 'center', margin: 0 }}>
-            Loading matches…
-          </p>
-        ) : visible.length === 0 ? (
-          <p style={{ padding: '24px 16px', color: 'var(--text-muted)', textAlign: 'center', margin: 0 }}>
-            {filter === 'starred'
-              ? 'No starred matches yet — tap ☆ on a match to add it.'
-              : filter === 'myteams'
-              ? 'No matches for your favorite teams on this day.'
-              : 'No matches on this day.'}
-          </p>
-        ) : (
-          visible.map(m => <MatchRow key={m.id} match={m} />)
-        )}
+        {/* Match list */}
+        <div style={{ background: 'var(--surface)', borderRadius: 'var(--radius-card)', border: '1px solid var(--border)', overflow: 'hidden' }}>
+          {allMatches.length === 0 ? (
+            <p style={{ padding: '24px 16px', color: 'var(--text-muted)', textAlign: 'center', margin: 0 }}>
+              Loading matches…
+            </p>
+          ) : visible.length === 0 ? (
+            <p style={{ padding: '24px 16px', color: 'var(--text-muted)', textAlign: 'center', margin: 0 }}>
+              {filter === 'starred'
+                ? 'No starred matches yet — tap ☆ on a match to add it.'
+                : filter === 'myteams'
+                ? 'No matches for your favorite teams on this day.'
+                : 'No matches on this day.'}
+            </p>
+          ) : (
+            visible.map(m => <MatchRow key={m.id} match={m} />)
+          )}
+        </div>
       </div>
     </div>
   );

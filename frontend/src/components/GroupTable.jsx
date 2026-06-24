@@ -1,27 +1,24 @@
 import StandingsRow from './StandingsRow.jsx';
 
 const HEADERS = [
-  { label: '',    title: '',                   align: 'left'   },
-  { label: '#',   title: 'Rank',               align: 'center' },
-  { label: 'Team',title: 'Team',               align: 'left'   },
-  { label: 'P',   title: 'Played',             align: 'center' },
-  { label: 'W',   title: 'Won',                align: 'center' },
-  { label: 'D',   title: 'Drawn',              align: 'center' },
-  { label: 'L',   title: 'Lost',               align: 'center' },
-  { label: 'GF',  title: 'Goals For',          align: 'center' },
-  { label: 'GA',  title: 'Goals Against',      align: 'center' },
-  { label: 'GD',  title: 'Goal Difference',    align: 'center' },
-  { label: 'Pts', title: 'Points',             align: 'center' },
+  { label: '',    title: '',              align: 'left'   },
+  { label: '#',   title: 'Rank',          align: 'center' },
+  { label: 'Team',title: 'Team',          align: 'left'   },
+  { label: 'GP',  title: 'Games Played',  align: 'center' },
+  { label: 'W',   title: 'Won',           align: 'center' },
+  { label: 'D',   title: 'Drawn',         align: 'center' },
+  { label: 'L',   title: 'Lost',          align: 'center' },
+  { label: 'Pts', title: 'Points',        align: 'center' },
 ];
 
-export default function GroupTable({ group }) {
+export default function GroupTable({ group, glass }) {
   return (
-    <div style={{ background: 'var(--surface)', borderRadius: 'var(--radius-card)', border: '1px solid var(--border)', overflow: 'hidden' }}>
+    <div className={`group-table-card${glass ? ' glass' : ''}`}>
       <div className="card-header section-title group-table-header" data-group={group.id}>
         Group {group.id}
       </div>
       <div style={{ overflowX: 'auto' }}>
-        <table style={{ width: '100%', borderCollapse: 'collapse', minWidth: 340 }}>
+        <table style={{ width: '100%', borderCollapse: 'collapse' }}>
           <caption style={{ display: 'none' }}>Group {group.id} standings</caption>
           <thead>
             <tr>

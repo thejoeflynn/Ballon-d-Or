@@ -7,6 +7,7 @@ import Tabs from '../components/Tabs.jsx';
 import Legend from '../components/Legend.jsx';
 import GroupTable from '../components/GroupTable.jsx';
 import BracketView from '../components/BracketView.jsx';
+import ImmersiveHero from '../components/ImmersiveHero.jsx';
 
 const TABS = [
   { id: 'group',   label: 'Group Stage' },
@@ -35,30 +36,41 @@ export default function Standings() {
   })), [winners, runnersUp]);
 
   return (
-    <div>
-      <h1 className="page-title">Standings</h1>
-      <p className="page-subtitle">
-        {tab === 'bracket'
-          ? 'Projected — based on current group standings.'
-          : 'Group stage results — top 2 from each group advance.'}
-      </p>
-      <Tabs tabs={TABS} active={tab} onChange={setTab} />
+    <div className="standings-page">
 
+      {/* ── Immersive stadium hero ── */}
+      <ImmersiveHero className="standings-hero">
+        <div className="standings-hero-head">
+          <h1 className="standings-hero-title">Standings</h1>
+          <p className="standings-hero-sub">
+            {tab === 'bracket'
+              ? 'Projected — based on current group standings.'
+              : 'Group stage results — top 2 from each group advance.'}
+          </p>
+          <Tabs tabs={TABS} active={tab} onChange={setTab} />
+        </div>
+      </ImmersiveHero>
+
+      {/* ── Below the hero (centered column) ── */}
       {tab === 'group' && (
-        <>
+        <div className="standings-below">
           {!hasResults && (
-            <div style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 'var(--radius-card)', padding: '10px 14px', marginBottom: 16, fontSize: '0.82rem', color: 'var(--text-muted)' }}>
+            <div className="standings-empty-banner">
               No results yet — standings update as matches are played.
             </div>
           )}
           <Legend />
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))', gap: 16 }}>
+          <div className="standings-groups-grid">
             {annotated.map(g => <GroupTable key={g.id} group={g} />)}
           </div>
-        </>
+        </div>
       )}
 
-      {tab === 'bracket' && <BracketView matchups={matchups} />}
+      {tab === 'bracket' && (
+        <div className="standings-below">
+          <BracketView matchups={matchups} />
+        </div>
+      )}
     </div>
   );
 }

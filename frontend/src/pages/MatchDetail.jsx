@@ -105,7 +105,7 @@ export default function MatchDetail() {
 
       {/* AI commentary slot */}
       <div style={{ background: 'var(--surface)', borderRadius: 'var(--radius-card)', border: '1px solid var(--border)', overflow: 'hidden', marginTop: 20 }}>
-        <div className="card-header section-title">AI Commentary</div>
+        <div className="card-header section-title">🦅 Clutch AI Commentary</div>
         {commentaryLoading && (
           <p style={{ padding: '16px', color: 'var(--text-muted)', margin: 0, fontSize: '0.9rem' }}>
             Generating pre-match analysis…

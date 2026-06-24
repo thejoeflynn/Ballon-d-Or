@@ -22,15 +22,14 @@ export default function StandingsRow({ row, rank, state = 'none' }) {
       <td style={{ padding: '0 8px' }}>
         <Link
           to={`/teams/${row.slug}`}
-          style={{ display: 'flex', alignItems: 'center', gap: 6, overflow: 'hidden', textDecoration: 'none', color: 'inherit' }}
+          style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', minWidth: 0, overflow: 'hidden', textDecoration: 'none', color: 'inherit' }}
           className="standings-team-link"
         >
-          <Flag slug={row.slug} alt={row.name} style={{ width: 20, height: 14, objectFit: 'cover', borderRadius: 2, flexShrink: 0 }} />
-          <span style={{ fontWeight: 600, fontSize: '0.85rem', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{row.name}</span>
-          <span style={{ color: 'var(--text-muted)', fontSize: '0.75rem', flexShrink: 0 }}>{row.abbr}</span>
+          <Flag slug={row.slug} alt={row.name} style={{ width: '1.1rem', height: '0.78rem', objectFit: 'cover', borderRadius: 2, flexShrink: 0 }} />
+          <span style={{ fontWeight: 600, fontSize: '0.85rem', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis', minWidth: 0 }}>{row.name}</span>
         </Link>
       </td>
-      {[row.played, row.won, row.drawn, row.lost, row.gf, row.ga, row.gd > 0 ? `+${row.gd}` : row.gd].map((v, i) => (
+      {[row.played, row.won, row.drawn, row.lost].map((v, i) => (
         <td key={i} style={{ padding: '0 6px', textAlign: 'center', fontSize: '0.8rem', color: 'var(--text-muted)' }}>{v}</td>
       ))}
       <td style={{ padding: '0 8px', textAlign: 'center', fontWeight: 700, fontSize: '0.85rem', color: 'var(--text)' }}>{row.points}</td>

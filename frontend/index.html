@@ -9,13 +9,9 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;600;700&display=swap" rel="stylesheet" />
     <script>
+      // Apply saved text size before first paint (avoids a flash of default size).
       (function () {
-        var t = localStorage.getItem('theme') || 'System';
-        var s = parseFloat(localStorage.getItem('fontScale')) || 1;
-        var resolved = t === 'System'
-          ? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light')
-          : t.toLowerCase();
-        document.documentElement.setAttribute('data-theme', resolved);
+        var s = parseFloat(localStorage.getItem('fontScale')) || 1.15;
         document.documentElement.style.setProperty('--font-scale', s);
       })();
     </script>
